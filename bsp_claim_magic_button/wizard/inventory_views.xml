@@ -1,0 +1,41 @@
+<odoo>
+	<data>
+
+	    <record id="view_bsp_claim_magic_button_batch" model="ir.ui.view">
+			<field name="name">bsp.claim.magic.button.form</field>
+			<field name="model">bsp.claim.magic.button</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+
+		        <form string="Get Batch Number From BIS">
+		        	<group invisible="1">
+		        		<field name="action"/>
+		        	</group>
+					<group>
+						<field name="start_date"/>
+						<field name="end_date" />
+					</group>
+	                <footer>
+	                    <button name="action_magic" type="object" string="Generate" class="oe_highlight"/> or
+	                    <button string="Cancel" class="oe_link" special="cancel"/>
+	                </footer>
+
+		        </form>
+	    	</field>
+	    </record>
+
+	    <record id="action_bsp_claim_magic_button_batch" model="ir.actions.act_window">
+			<field name="name">Get Batch Number From BIS</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">bsp.claim.magic.button</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_bsp_claim_magic_button_batch"/>
+			<field name="context">{'default_action':'get_product_batch'}</field>
+			<field name="target">new</field>
+	    </record>
+
+<!--		<menuitem id="menu_bsp_claim_magic_button_batch" parent="stock.menu_stock_warehouse_mgmt" action="action_bsp_claim_magic_button_batch"/>-->
+
+	</data>
+</odoo>

@@ -1,0 +1,202 @@
+<odoo>
+<!--    <template id="assets_backend"-->
+<!--              name="aging_claim_report assets" inherit_id="web.assets_backend">-->
+<!--        <xpath expr="." position="inside">-->
+<!--            <link href="/bsp_claim_reports/static/src/css/report.css" rel="stylesheet"/>-->
+<!--            <script type="text/javascript"-->
+<!--                    src="/bsp_claim_reports/static/src/js/aging_claim_report_backend.js"/>-->
+<!--        </xpath>-->
+<!--    </template>-->
+
+<!--    <template id="bsp_claim_reports.internal_layout">-->
+<!--        <div class="article">-->
+<!--            <link href="/bsp_claim_reports/static/src/css/report.css" rel="stylesheet"/>-->
+<!--            <t t-raw="0"/>-->
+<!--        </div>-->
+<!--        <div class="footer">-->
+<!--            <div class="row">-->
+<!--                <div class="col-6 custom_footer">-->
+<!--                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>-->
+<!--                </div>-->
+<!--                <div class="col-6 text-right custom_footer">-->
+<!--                    <span class="page"/>/<span class="topage"/>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </template>-->
+
+    <template id="report_buttons">
+        <div class="button_row">
+            <button class="o_finance_claim_reports_print btn btn-sm oe_button"><span class="fa fa-print"/>Print</button>
+            <button class="o_finance_claim_reports_export btn btn-sm oe_button"><span class="fa fa-download"/>Export</button>
+        </div>
+    </template>
+
+    <template id="aging_claim_report_html">
+        <div class="o_finance_claim_reports_page">
+            <t t-call="bsp_claim_reports.report_buttons"/>
+            <t t-call="bsp_claim_reports.aging_claim_report_base"/>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.aging_claim_report_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="bsp_claim_reports.internal_layout">
+                    <t t-call="bsp_claim_reports.aging_claim_report_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="bsp_claim_reports.aging_claim_report_base">
+            <div class="page">
+                <div class="row">
+                    <t t-set="title">Aging Claim  </t>
+                    <h4 class="mt0" t-esc="title" style="text-align: center;"/>
+                </div>
+                <!-- Display filters -->
+                <t t-call="bsp_claim_reports.aging_claim_report_filters"/>
+                <!-- Display stock card table -->
+                <div class="act_as_table data_table mt4" style="width: 100%;">
+                    <!-- Display header line-->
+                    <t t-call="bsp_claim_reports.aging_claim_lines_header"/>
+                    <t t-set="total_saldo" t-value = "0.0"/>
+                    <t t-set="total_debit" t-value = "0.0"/>
+                    <t t-set="total_credit" t-value = "0.0"/>
+                    <t t-set="total_saldo_akhir" t-value = "0.0"/>
+                    <t t-set="total_claim_amount" t-value = "0.0"/>
+                    <t t-set="total_90" t-value = "0.0"/>
+                    <t t-set="total_60" t-value = "0.0"/>
+                    <t t-set="total_30" t-value = "0.0"/>
+                    <t t-set="total_00" t-value = "0.0"/>
+                    <t t-foreach="o.results" t-as="partner_line">
+                        <t t-set="total_saldo" t-value="total_saldo + partner_line.begin_balance"/>
+                        <t t-set="total_debit" t-value="total_debit + partner_line.debit"/>
+                        <t t-set="total_credit" t-value="total_credit + partner_line.credit"/>
+                        <t t-set="total_saldo_akhir" t-value="total_saldo_akhir + partner_line.end_balance"/>
+                        <t t-set="total_claim_amount" t-value="total_claim_amount + partner_line.total_amount"/>
+                        <t t-set="total_90" t-value="total_90 + partner_line.morethan90"/>
+                        <t t-set="total_60" t-value="total_60 + partner_line.bt61and90"/>
+                        <t t-set="total_30" t-value="total_30 + partner_line.bt31and60"/>
+                        <t t-set="total_00" t-value="total_00 + partner_line.bt00and30"/>
+
+                        <t t-call="bsp_claim_reports.aging_claim_lines"/>
+                    </t>
+                    <!-- Display footer lines -->
+                    <div class="act_as_row lines">
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell">
+                            Total
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_saldo)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_debit)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_credit)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_saldo_akhir)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_claim_amount)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_90)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_60)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_30)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_00)"/>
+                        </div>
+                    </div>
+
+                </div>
+                <p style="page-break-before:always;"></p>
+            </div>
+    </template>
+
+    <template id="bsp_claim_reports.aging_claim_report_filters">
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Date From</div>
+                <div class="act_as_cell">Date To</div>
+            </div>
+            <div class="act_as_row">
+                <div class="act_as_cell">
+                    <span t-field="o.date_from"/>
+                </div>
+                <div class="act_as_cell">
+                    <span t-field="o.date_to"/>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.aging_claim_lines_header">
+        <div class="act_as_thead">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Code</div>
+                <div class="act_as_cell">Principal</div>
+                <div class="act_as_cell">Saldo</div>
+                <div class="act_as_cell">Debit</div>
+                <div class="act_as_cell">Credit</div>
+                <div class="act_as_cell">Balance</div>
+                <div class="act_as_cell">Saldo Claim</div>
+                <div class="act_as_cell">More than 90 days</div>
+                <div class="act_as_cell">Between 61 and 90 days</div>
+                <div class="act_as_cell">Between 31 and 60 days</div>
+                <div class="act_as_cell">Between 0 and 30 days</div>
+            </div>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.aging_claim_lines">
+        <div class="act_as_row lines">
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.partner_id.ref"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.partner_id.name"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.begin_balance)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.debit)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.credit)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.end_balance)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.total_amount)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.morethan90)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.bt61and90)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.bt31and60)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.bt00and30)"/>
+            </div>
+
+
+        </div>
+   </template>
+
+</odoo>

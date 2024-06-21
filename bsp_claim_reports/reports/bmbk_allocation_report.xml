@@ -1,0 +1,183 @@
+<odoo>
+    <template id="report_buttons">
+        <div class="button_row">
+            <button class="o_finance_claim_reports_print btn btn-sm oe_button"><span class="fa fa-print"/>Print</button>
+            <button class="o_finance_claim_reports_export btn btn-sm oe_button"><span class="fa fa-download"/>Export</button>
+<!--            <button class="o_finance_claim_reports_download btn btn-sm oe_button"><span class="fa fa-download"/>Download DBF</button>-->
+             </div>
+    </template>
+
+    <template id="bsp_claim_reports.bm_alloc_allocation_report_html">
+        <div class="o_finance_claim_reports_page">
+            <t t-call="bsp_claim_reports.report_buttons"/>
+            <t t-call="bsp_claim_reports.bmbk_allocation_report_base"/>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.bk_alloc_allocation_report_html">
+        <div class="o_finance_claim_reports_page">
+            <t t-call="bsp_claim_reports.report_buttons"/>
+            <t t-call="bsp_claim_reports.bmbk_allocation_report_base"/>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.bm_allocation_report_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="bsp_claim_reports.internal_layout">
+                    <t t-call="bsp_claim_reports.bmbk_allocation_report_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="bsp_claim_reports.bk_allocation_report_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="bsp_claim_reports.internal_layout">
+                    <t t-call="bsp_claim_reports.bmbk_allocation_report_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="bsp_claim_reports.bmbk_allocation_report_base">
+            <div class="page">
+                <div class="row">
+                    <t t-set="title">BM Allocation</t>
+                    <t t-if="o.report_name == 'bk'">
+                       <t t-set="title">BK Allocation</t>
+                    </t>
+                    <h4 class="mt0" t-esc="title" style="text-align: center;"/>
+                </div>
+                <!-- Display filters -->
+                <t t-call="bsp_claim_reports.bmbk_allocation_report_filters"/>
+                <!-- Display stock card table -->
+                <div class="act_as_table data_table mt4" style="width: 100%;">
+                    <!-- Display header line-->
+                    <t t-call="bsp_claim_reports.bmbk_allocation_lines_header"/>
+                     <t t-set="total_net_amount" t-value = "0.0"/>
+
+                    <t t-foreach="o.results" t-as="partner_line">
+                        <t t-set="total_net_amount" t-value="total_net_amount + partner_line.claim_id.net_amount"/>
+                        <t t-call="bsp_claim_reports.bmbk_allocation_lines"/>
+                    </t>
+                    <!-- Display footer lines -->
+                    <div class="act_as_row lines">
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell">
+                            Total
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_net_amount)"/>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <p style="page-break-before:always;"></p>
+            </div>
+    </template>
+
+    <template id="bsp_claim_reports.bmbk_allocation_report_filters">
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Date From</div>
+                <div class="act_as_cell">Date To</div>
+            </div>
+            <div class="act_as_row">
+                <div class="act_as_cell">
+                    <span t-field="o.date_from"/>
+                </div>
+                <div class="act_as_cell">
+                    <span t-field="o.date_to"/>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+
+
+
+
+    <template id="bsp_claim_reports.bmbk_allocation_lines_header">
+        <div class="act_as_thead">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">No.</div>
+                <div class="act_as_cell">BM/BK Number</div>
+                <div class="act_as_cell">Date</div>
+                <div class="act_as_cell">Amount</div>
+                <div class="act_as_cell">Allocated </div>
+                <div class="act_as_cell">Remain</div>
+                <div class="act_as_cell">Line Item</div>
+                <div class="act_as_cell">Branch</div>
+                <div class="act_as_cell">Principal</div>
+                <div class="act_as_cell">Realisasi</div>
+                <div class="act_as_cell">Payment Voucher</div>
+                <div class="act_as_cell">Payment Number</div>
+                <div class="act_as_cell">Faktur Jasa</div>
+                <div class="act_as_cell">Program</div>
+                <div class="act_as_cell">KODING</div>
+
+            </div>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.bmbk_allocation_lines">
+        <div class="act_as_row lines">
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.nomor"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.bmbk_group"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.bmbk_date"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.total_amount "/>
+            </div>
+
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.alloc_amount"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.remain_amount"/>
+            </div>
+
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.item_name"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.branch_code"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.partner_id.ref"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.real_amount"/>
+            </div>
+
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.pv_number"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.payment_number"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.service_inv"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.remark"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-if="partner_line.claim_id.coding">
+                    <t t-esc="partner_line.claim_id.coding.upper()"/>
+                </t>
+            </div>
+
+        </div>
+   </template>
+
+</odoo>

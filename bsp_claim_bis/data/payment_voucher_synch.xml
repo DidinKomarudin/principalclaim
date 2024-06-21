@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="synch_pending_pv_from_bisap" model="bsp.payment.voucher.synch">
+            <field name="name">_PENDINGPV_</field>
+            <field name="type">bis_to_odoo</field>
+            <field name="pv_type">pv</field>
+            <field name="fromdate">2023/01/01</field>
+        </record>
+
+        <record id="synch_posted_pv_from_bisap" model="bsp.payment.voucher.synch">
+            <field name="name">_POSTEDPV_</field>
+            <field name="type">bis_to_odoo</field>
+            <field name="pv_type">pv</field>
+            <field name="fromdate">2023/01/01</field>
+        </record>
+
+        <record id="synch_posted_bk_from_hoccd" model="bsp.payment.voucher.synch">
+            <field name="name">_POSTEDBK_</field>
+            <field name="type">bis_to_odoo</field>
+            <field name="pv_type">bk</field>
+            <field name="fromdate">2023/01/01</field>
+        </record>
+
+        <record id="synch_current_bm_from_hoccd" model="bsp.payment.voucher.synch">
+            <field name="name">_CURRENTBM_</field>
+            <field name="type">bis_to_odoo</field>
+            <field name="pv_type">bm</field>
+            <field name="fromdate">2023/01/01</field>
+        </record>
+
+
+    </data>
+</odoo>

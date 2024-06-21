@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template id="template" xml:space="preserve">
+    <t  t-extend = "PaymentPopOver">
+        <t t-jquery="button.js_unreconcile_payment" t-operation="replace"/>
+<!--            <button class="btn btn-sm btn-primary js_unreconcile_payment float-left" groups="base.group_no_one" t-att-payment-id="payment_id" style="margin-top:5px; margin-bottom:5px;">Unreconcile</button>-->
+<!--        </t>-->
+    </t>
+</template>

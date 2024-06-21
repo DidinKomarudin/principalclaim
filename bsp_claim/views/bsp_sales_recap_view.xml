@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="bsp_sales_recap_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.sales.recap.search.form</field>
+        <field name="model">bsp.sales.recap</field>
+        <field name="arch" type="xml">
+            <search string="Montly Sales Recapitulation">
+                <field name="yearperiod"/>
+                <field name="monthperiod"/>
+                <field name="dateperiod"/>
+                <field name="branch_code"/>
+                <field name="operating_unit_id"/>
+                <field name="principal_code"/>
+                <field name="partner_id"/>
+                <field name="sales_amount"/>
+                <field name="claim_amount" />
+                <field name="paid_amount" />
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_sales_recap_form" model="ir.ui.view">
+        <field name="name">bsp.sales.recap.form</field>
+        <field name="model">bsp.sales.recap</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+
+                    <group>
+                        <group>
+                            <field name="yearperiod" />
+                            <field name="monthperiod" />
+                            <field name="dateperiod"/>
+                            <field name="branch_code" />
+                            <field name="operating_unit_id" />
+                            <field name="principal_code" />
+                            <field name="partner_id" />
+                            <field name="sales_amount" />
+                            <field name="claim_amount" />
+                            <field name="paid_amount"/>
+                        </group>
+
+                    </group>
+
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsp_sales_recap_tree" model="ir.ui.view">
+        <field name="name">bsp.sales.recap.tree</field>
+        <field name="model">bsp.sales.recap</field>
+        <field name="arch" type="xml">
+            <tree string="Montly Sales Recapitulation">
+                <field name="yearperiod"/>
+                <field name="monthperiod"/>
+                <field name="dateperiod"/>
+                <field name="branch_code"/>
+                <field name="operating_unit_id"/>
+                <field name="principal_code"/>
+                <field name="partner_id"/>
+                <field name="sales_amount"/>
+                <field name="claim_amount" />
+                <field name="paid_amount"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_sales_recap_pivot" model="ir.ui.view">
+            <field name="name">bsp.sales.recap.pivot</field>
+            <field name="model">bsp.sales.recap</field>
+            <field name="arch" type="xml">
+                <pivot string="Monthly Sales Recapitulation">
+                    <field name="operating_unit_id" type="row"/>
+                    <field name="partner_id" type="row"/>
+                    <field name="dateperiod" type="col"/>
+                    <field name="sales_amount" type="measure"/>
+                    <field name="claim_amount" type="measure"/>
+                    <field name="paid_amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+    <record id="view_sales_recap_graph_period" model="ir.ui.view">
+            <field name="name">bsp.sales.recap.graph</field>
+            <field name="model">bsp.sales.recap</field>
+            <field name="arch" type="xml">
+                <graph string="Monthly Sales Recapitulation Statistics" type="bar">
+                    <field name="dateperiod" type="col"/>
+                    <field name="operating_unit_id" type="row"/>
+                    <field name="sales_amount" operator="+" type='measure'/>
+                    <field name="claim_amount" operator="+" type='measure'/>
+                    <field name="paid_amount" operator="+" type='measure'/>
+                </graph>
+            </field>
+        </record>
+
+
+
+</odoo>

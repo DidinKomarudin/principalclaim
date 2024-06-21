@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="bsp_creditnote_alloc_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.creditnote.alloc.search.form</field>
+        <field name="model">bsp.creditnote.alloc</field>
+        <field name="arch" type="xml">
+            <search string="Claim Allocation">
+                <field name="name"/>
+                <field name="allocation_type"/>
+                <field name="allocation_date"/>
+                <field name="offset_type"/>
+                <field name="reference_no"/>
+                <field name="reference_date"/>
+                <field name="allocation_amount"/>
+                <field name="cn_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_alloc_form" model="ir.ui.view">
+        <field name="name">bsp.creditnote.alloc.form</field>
+        <field name="model">bsp.creditnote.alloc</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Claim Allocation No:"/>
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="allocation_type" widget="radio"/>
+                            <field name="allocation_date"/>
+                            <field name="offset_type"/>
+                            <field name="reference_no"/>
+                            <field name="reference_date"/>
+                            <field name="allocation_amount"/>
+                        </group>
+                        <group>
+                            <field name="cn_id"/>
+                        </group>
+                    </group>
+
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_alloc_tree" model="ir.ui.view">
+        <field name="name">bsp.creditnote.alloc.tree</field>
+        <field name="model">bsp.creditnote.alloc</field>
+        <field name="arch" type="xml">
+            <tree string="Claim Allocation">
+                <field name="name"/>
+                <field name="allocation_type"/>
+                <field name="allocation_date"/>
+                <field name="offset_type"/>
+                <field name="reference_no"/>
+                <field name="reference_date"/>
+                <field name="allocation_amount"/>
+                <field name="cn_id"/>
+            </tree>
+        </field>
+    </record>
+    
+    
+    
+    <record id="bsp_creditnote_kl_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.creditnote.kl.lines.search.form</field>
+        <field name="model">bsp.creditnote.kl.lines</field>
+        <field name="arch" type="xml">
+            <search string="KL Product Items">
+                <field name="cn_id"/>
+                <field name="name"/>
+                <field name="product_name"/>
+                <field name="reference_no"/>
+                <field name="reference_date"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_kl_form" model="ir.ui.view">
+        <field name="name">bsp.creditnote.kl.lines.form</field>
+        <field name="model">bsp.creditnote.kl.lines</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Kode Karang:"/>
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+
+                        <field name="cn_id"/>
+                        <field name="product_name"/>
+                        <field name="product_unit"/>
+                        <field name="quantity"/>
+                        <field name="hna"/>
+                        <field name="total"/>
+                        <field name="reference_no"/>
+                        <field name="reference_date"/>
+
+                    </group>
+
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_kl_tree" model="ir.ui.view">
+        <field name="name">bsp.creditnote.kl.lines.tree</field>
+        <field name="model">bsp.creditnote.kl.lines</field>
+        <field name="arch" type="xml">
+            <tree string="KL Product Item">
+                <field name="name"/>
+                 <field name="cn_id"/>
+                 <field name="product_name"/>
+                 <field name="product_unit"/>
+                 <field name="quantity"/>
+                 <field name="hna"/>
+                 <field name="total"/>
+                 <field name="reference_no"/>
+                 <field name="reference_date"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+</odoo>

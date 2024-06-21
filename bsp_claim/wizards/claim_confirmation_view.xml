@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="confirm_wizard_form">
+            <field name="name">wizard.form</field>
+            <field name="model">claim.confirm.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Confirm dialog">
+                    <field name="yes_no" readonly="1" />
+                     <field name="btn_ok" invisible="1" />
+                    <footer>
+                        <button class="oe_highlight" name="yes" string="Yes" attrs="{'invisible':[('btn_ok','=',True)]}" />
+                        <button class="oe_highlight" name="no" string="No" attrs="{'invisible':[('btn_ok','=',True)]}"/>
+                        <button class="oe_highlight" special="cancel" name="ok" string="OK" attrs="{'invisible':[('btn_ok','=',False)]}" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="claim_cl_monitoring_wizard_form" model="ir.ui.view">
+        <field name="name">claim.cl.monitoring.report.wizard.form</field>
+        <field name="model">claim.cl.monitoring.report</field>
+        <field name="arch" type="xml">
+            <form>
+                <group name="criteria">
+                    <group>
+                        <field name="is_branch" invisible="1"/>
+                        <field name="branch_id" attrs="{'required': [('is_branch','=',True)]}"/>
+                        <field name="partner_id"/>
+                        <field name="claim_type"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="button_open" string="View"
+                            type="object" default_focus="1" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="claim_cl_monitoring_wizard_action" model="ir.actions.act_window">
+        <field name="name">Claim Monitoring (NEW)</field>
+        <field name="res_model">claim.cl.monitoring.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_module_filter" model="ir.ui.view">
+            <field name="name">ir.module.module.search</field>
+            <field name="model">ir.module.module</field>
+            <field name="inherit_id" ref="base.view_module_filter"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="author"/>
+                    <filter name="bsp_custom" string="BSP Customs" domain="[
+                        '|', '|', '|', '|', '|', '|',
+                        '|', '|', '|', '|', '|',
+                        ('author', 'ilike', 'agung'),
+                        ('author', 'ilike', 'erick'),
+                        ('author', 'ilike', 'miftah'),
+                        ('author', 'ilike', 'tedi'),
+                        ('author', 'ilike', 'bsp'),
+                        ('author', 'ilike', 'dk'),
+                        ('author', 'ilike', 'didin'),
+                        ('author', 'ilike', 'arif'),
+                        ('author', 'ilike', 'lobot'),
+                        ('author', 'ilike', 'ades'),
+                        ('author', 'ilike', 'binasanprima'),
+                        ('website', 'ilike', 'binasanprima'),
+                    ]"/>
+                    <filter name="missing_module" string="Missing Module" domain="[('missing', '=', True)]"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

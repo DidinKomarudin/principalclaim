@@ -1,0 +1,32 @@
+<odoo>
+    <data>
+        
+        <record id="base_wizard_form_view" model="ir.ui.view">
+            <field name="name">base.wizard.form</field>
+            <field name="model">base.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Base Wizard">
+                    
+                    <footer>
+                        <button name="action_confirm" type="object" string="Confirm" class="oe_highlight"/> or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                        <field name="action" invisible="1"/>
+                    </footer>
+                    
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_base_wizard" model="ir.actions.act_window">
+            <field name="name">Base Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">base.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base_wizard_form_view"/>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+</odoo>

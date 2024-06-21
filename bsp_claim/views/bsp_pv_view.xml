@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="bsp_pv_search_view" model="ir.ui.view">
+        <field name="name">bsp.payment.voucher.search</field>
+        <field name="model">bsp.payment.voucher</field>
+        <field name="arch" type="xml">
+            <search string="BSP Payment Voucher">
+                <field name="trx_date"/>
+                <field name="name"/>
+                <field name="ref_coa"/>
+                <field name="type"/>
+                <field name="principal_code"/>
+                 <field name="ref_document"/>
+                <field name="ref_hodocument"/>
+                <field name="state"/>
+                <field name="legacy_state"/>
+
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_pv_form" model="ir.ui.view">
+        <field name="name">bsp.payment.voucher.form</field>
+        <field name="model">bsp.payment.voucher</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <header>
+                     <button name="action_voucher_to_open"
+                             string="Reset to OPEN Voucher"
+                             groups="base.group_no_one"
+                             type="object" attrs="{'invisible':['|',('type','not in',('pv')),('state','=', 'open')]}"/>
+
+                    <button name="button_generete_bk"
+                            string="Generate BK HOCCD"
+                            type="object"
+                            attrs="{'invisible':['|',('type','not in',('pv'))]}"/>
+
+                    <button name="button_regenerete_bk"
+                            string="Regenerate BK HOCCD"
+                            type="object"
+                            groups="base.group_no_one"
+                            attrs="{'invisible':['|',('type','not in',('pv'))]}"/>
+
+                    <button name="button_get_bk_hoccd"
+                            string="GET BK HOCCD"
+                            type="object"
+                            attrs="{'invisible':['|',('type','not in',('pv'))]}"/>
+
+                    <button name="button_reset_bm"
+                            string="Reset BM HOCCD"
+                            type="object"
+                            groups="base.group_no_one"
+                            attrs="{'invisible':['|',('type','not in',('bm'))]}"/>
+                 </header>
+                 <sheet>
+                        <div  class="oe_button_box" name="button_box">
+
+                            <button class="oe_stat_button" name="open_payment_line_matching_screen" type="object" attrs="{'invisible':[('invoice_line_count','=',0)]}" icon="fa-university">
+                                 <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="invoice_line_count" widget="statinfo" nolabel="1" class="mr4"/>
+                                    </span>
+                                    <span class="o_stat_text">Claim(s)</span>
+                                    </div>
+
+                            </button>
+                            <div>
+                                    <span class="o_stat_text">Total Amount: </span>
+                                     <span class="o_stat_value">
+                                        <field name="invoice_line_amount" widget="statinfo" nolabel="1" class="mr4"/>
+                                    </span>
+
+
+                            </div>
+
+                        </div>
+                        <div class="oe_title">
+
+                            <label for="name" string="PV Number:"/>
+                            <h1>
+                                <field name="name" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group colspan="2">
+                                <field name="invoice_line_count" invisible="1"/>
+                                <field name="isreadonly" invisible="1"/>
+                                <field name="ref_coa" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                 <field name="trx_date" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="type" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                 <field name="principal_code" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="total_amount" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="alloc_amount" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="remain_amount" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="ref_document" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="ref_document_id" attrs="{'invisible': [('isreadonly','=',True)]}"/>
+                                <field name="ref_hodocument" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="state" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="legacy_state" attrs="{'readonly': [('isreadonly','=',True)]}"/>
+                                <field name="time_stamp" attrs="{'invisible': [('isreadonly','=',True)]}"/>
+                                <field name="time_stamp_display" attrs="{'invisible': [('isreadonly','=',True)]}"/>
+                            </group>
+                        </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsp_pv_tree" model="ir.ui.view">
+        <field name="name">bsp.payment.voucher.tree</field>
+        <field name="model">bsp.payment.voucher</field>
+        <field name="arch" type="xml">
+            <tree string="BSP Payment Voucher" create="0">
+                <field name="name"/>
+                <field name="ref_coa"/>
+                 <field name="trx_date"/>
+                <field name="type"/>
+                <field name="principal_code"/>
+                <field name="total_amount" sum="Total Amount"/>
+                <field name="alloc_amount" sum="Allocation Amount"/>
+                <field name="remain_amount" sum="Remain Amount"/>
+                <field name="ref_document"/>
+                <field name="ref_hodocument"/>
+                <field name="state"/>
+                <field name="legacy_state"/>
+                <field name="time_stamp_display"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_claim_account_invoice_line_tree" model="ir.ui.view">
+        <field name="name">claim.account.invoice.lines.tree</field>
+        <field name="model">account.invoice.line</field>
+        <field name="arch" type="xml">
+            <tree string="Claims Invoice List" create="0" edit="0">
+                <field name="invoice_id"/>
+<!--                <filed name="branch_code"/>-->
+                <field name="product_id"/>
+                <field name="claimcl_id"/>
+<!--                <field name="bmbk_number"/>-->
+<!--                <field name="payment_ids" widget="many2many_tags"/>-->
+<!--                <field name="bmbk_ids" widget="many2many_tags"/>-->
+<!--                <field name="payment_amount" sum="payment_amount"/>-->
+<!--&lt;!&ndash;                <field name="claim_date"/>&ndash;&gt;-->
+<!--                <field name="claim_amount"/>-->
+                <field name="payment_amount" sum="payment_amount"/>
+                <field name="price_subtotal" sum="price_subtotal"/>
+<!--                <field name="remark"/>-->
+<!--                <field name="vistex"/>-->
+            </tree>
+        </field>
+    </record>
+
+        <record id="view_claim_invoice_line_form" model="ir.ui.view">
+        <field name="model">account.invoice.line</field>
+        <field name="inherit_id" ref="account.view_invoice_line_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="create">false</attribute>
+                <attribute name="edit">false</attribute>
+            </xpath>
+            <xpath expr="//field[@name='price_unit']" position="after">
+                <field name="invoice_id" options='{"no_create": True, "no_edit": True}'/>
+                <field name="claimcl_id" options='{"no_create": True, "no_edit": True}'/>
+<!--                <field name="bmbk_number"/>-->
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

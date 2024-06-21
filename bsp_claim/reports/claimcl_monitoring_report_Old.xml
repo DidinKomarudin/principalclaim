@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="claim_cl_monitoring_report_search_view" model="ir.ui.view">
+        <field name="name">bsp.claim.cl.monitoring.report.search</field>
+        <field name="model">bsp.claim.cl.monitoring</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Claim Monitoring">
+                <field name="claim_id"/>
+                <field name="claim_type"/>
+                <field name="cn_id"/>
+                <field name="customer_code"/>
+<!--                groups="bsp_claim.cl.group_cn_allocation"/>-->
+                <field name="refund_id" />
+<!--                <field name="pay_id" />-->
+<!--                groups="bsp_claim.cl.group_account_invoice"/>-->
+                <field name="branch" />
+                <field name="principal" />
+                <field name="claim_date"/>
+                <field name="receive_date"/>
+                <field name="send_date"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_claim_cl_monitoring_report_tree">
+        <field name="name">bsp.claim.cl.monitoring.report.tree</field>
+        <field name="model">bsp.claim.cl.monitoring</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Claim Monitoring" create="0" delete="0">
+                <field name="claim_id"/>
+                <field name="claim_type" invisible="context.get('filtertype',False)"/>
+                <field name="state"/>
+<!--                <field name="claim_desc"/>-->
+<!--                    <field name="branch" />-->
+<!--                    <field name="principal" />-->
+                    <field name="claim_date"/>
+                    <field name="receive_date"/>
+                    <field name="send_date"/>
+                    <field name="claim_age"/>
+
+
+                <field name="cn_id"/>
+                <field name="customer_code"/>
+                <field name="cn_total" sum="Total CN" />
+                <field name="alloc_total" sum="Total Alloc"/>
+                <field name="withdraw_total" />
+                <field name="paid_total" />
+<!--                groups="bsp_claim.cl.group_cn_allocation"/>-->
+                <field name="refund_id"/>
+                <field name="refund_total" sum="Total Claim" />
+<!--                <field name="pay_id"/>-->
+                <field name="pay_total" sum="Total Payment" />
+                <field name="balance_total" sum="Total Balance" />
+<!--                groups="bsp_claim.cl.group_account_invoice"/>-->
+
+
+            </tree>
+        </field>
+    </record>
+
+
+
+    <record id="claim_type_monitoring_report_search_view" model="ir.ui.view">
+        <field name="name">bsp.claim.type.monitoring.report.search</field>
+        <field name="model">bsp.claim.type.monitoring</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Claim Monitoring by Type">
+                <field name="claim_id"/>
+<!--                <field name="claim_type"/>-->
+
+                <field name="refund_id" />
+<!--                <field name="pay_id" />-->
+<!--                groups="bsp_claim.cl.group_account_invoice"/>-->
+                <field name="branch" />
+                <field name="principal" />
+                <field name="claim_date"/>
+                <field name="receive_date"/>
+                <field name="send_date"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_claim_type_monitoring_report_tree">
+        <field name="name">bsp.claim.type.monitoring.report.tree</field>
+        <field name="model">bsp.claim.type.monitoring</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Claim Monitoring" create="0" delete="0">
+                <field name="claim_id"/>
+<!--                 <field name="claim_type"/>-->
+                <field name="state"/>
+                <field name="claim_desc"/>
+                    <field name="branch" />
+                    <field name="principal" />
+                    <field name="claim_date"/>
+                    <field name="receive_date"/>
+                    <field name="send_date"/>
+                    <field name="claim_age"/>
+                <field name="claim_total" sum="Total Claim" />
+                <field name="alloc_total" sum="Total Alloc"/>
+                <field name="unalloc_total" sum="Total UnAlloc"/>
+                <field name="refund_id"/>
+                <field name="refund_total" sum="Total Claim" />
+                <field name="balance_total" sum="Total Balance"/>
+
+
+            </tree>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payment_monitoring_report_search_view" model="ir.ui.view">
+        <field name="name">payment.analysis.report.search</field>
+        <field name="model">payment.analysis</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Payment Monitoring">
+                <field name="invoice_id"/>
+                <field name="date_invoice"/>
+                <field name="move_id"/>
+                <field name="payment_id"/>
+                <field name="payment_date"/>
+                <field name="bank_amount"/>
+                <field name="cash_amount"/>
+                <field name="offset_amount"/>
+                <field name="bd_amount"/>
+                <field name="balance_amount"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_payment_monitoring_report_tree">
+        <field name="name">payment.analysis.report.tree</field>
+        <field name="model">payment.analysis</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Payment Monitoring" create="0" delete="0">
+<!--                 <field name="inv_id" string="inv ID"/>-->
+<!--                <field name="pay_id" string="pay ID"/>-->
+                <field name="invoice_id"/>
+                <field name="date_invoice"/>
+                <field name="move_id"/>
+                <field name="payment_id"/>
+                <field name="payment_date"/>
+                <field name="bank_amount" sum="Total Bank In"/>
+                <field name="cash_amount" sum="Total Cash In"/>
+                <field name="offset_amount" sum="Total Offset"/>
+                <field name="bd_amount" sum="Total Billing Deduction"/>
+                <field name="balance_amount"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+
+</odoo>

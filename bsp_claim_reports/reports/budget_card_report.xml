@@ -1,0 +1,235 @@
+<odoo>
+    <template id="assets_backend"
+              name="budget_card_report assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link href="/bsp_claim_reports/static/src/css/report.css" rel="stylesheet"/>
+            <script type="text/javascript"
+                    src="/bsp_claim_reports/static/src/js/finance_claim_report_backend.js"/>
+        </xpath>
+    </template>
+
+    <template id="bsp_claim_reports.internal_layout">
+        <div class="article">
+            <link href="/bsp_claim_reports/static/src/css/report.css" rel="stylesheet"/>
+            <t t-raw="0"/>
+        </div>
+        <div class="footer">
+            <div class="row">
+                <div class="col-6 custom_footer">
+                    <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y')"/>
+                </div>
+                <div class="col-6 text-right custom_footer">
+                    <span class="page"/>/<span class="topage"/>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="report_buttons">
+        <div class="button_row">
+            <button class="o_finance_claim_reports_print btn btn-sm oe_button"><span class="fa fa-print"/>Print</button>
+            <button class="o_finance_claim_reports_export btn btn-sm oe_button"><span class="fa fa-download"/>Export</button>
+        </div>
+    </template>
+
+    <template id="budget_card_report_html">
+        <div class="o_finance_claim_reports_page">
+            <t t-call="bsp_claim_reports.report_buttons"/>
+            <t t-call="bsp_claim_reports.budget_card_report_base"/>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.budget_card_report_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="bsp_claim_reports.internal_layout">
+                    <t t-call="bsp_claim_reports.budget_card_report_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="bsp_claim_reports.budget_card_report_base">
+        <t t-foreach="o.partner_ids" t-as="partner">
+            <div class="page">
+                <div class="row">
+                    <t t-set="title">AR Claim Card - <t t-raw="partner.name"/>
+                    </t>
+                    <h4 class="mt0" t-esc="title" style="text-align: center;"/>
+                </div>
+                <!-- Display filters -->
+                <t t-call="bsp_claim_reports.budget_card_report_filters"/>
+                <!-- Display stock card table -->
+                <div class="act_as_table data_table mt4" style="width: 100%;">
+                    <!-- Display header line-->
+                    <t t-call="bsp_claim_reports.budget_card_lines_header"/>
+                    <!-- Display initial lines -->
+                    <t t-set="initial" t-value="o._get_initial(o.results.filtered(lambda l: l.partner_id == partner and l.is_initial))"/>
+                    <t t-set="init_ump" t-value="o._get_initial_ump(o.results.filtered(lambda l: l.partner_id == partner and l.is_initial))"/>
+                    <div class="act_as_row lines">
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell">
+                            Initial
+                        </div>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(initial)"/>
+                        </div>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell"/>
+                         <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(init_ump)"/>
+                        </div>
+
+                    </div>
+                    <!-- Display each lines -->
+                    <t t-set="ar_balance" t-value="initial"/>
+                    <t t-set="total_ump" t-value="init_ump"/>
+                    <t t-set="total_in" t-value = "0.0"/>
+                    <t t-set="total_out" t-value = "0.0"/>
+                    <t t-set="total_alloc" t-value = "0.0"/>
+                    <t t-foreach="o.results.filtered(lambda l: l.partner_id == partner and not l.is_initial)" t-as="partner_line">
+                        <t t-set="ar_balance" t-value="ar_balance + partner_line.ar_in - partner_line.ar_out"/>
+                        <t t-set="total_ump" t-value="total_ump + partner_line.ump_amount"/>
+                        <t t-set="total_in" t-value="total_in + partner_line.ar_in"/>
+                        <t t-set="total_out" t-value="total_out + partner_line.ar_out"/>
+                        <t t-set="total_alloc" t-value="total_alloc + partner_line.alloc_amount"/>
+                        <t t-call="bsp_claim_reports.budget_card_lines"/>
+                        <t t-call="bsp_claim_reports.budget_card_lines_alloc"/>
+
+                    </t>
+                    <!-- Display footer lines -->
+                    <div class="act_as_row lines">
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell">
+                            Total
+                        </div>
+                       <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_in)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_out)"/>
+                        </div>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_alloc)"/>
+                        </div>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_ump)"/>
+                        </div>
+
+                    </div>
+
+                </div>
+                <p style="page-break-before:always;"></p>
+            </div>
+        </t>
+    </template>
+
+    <template id="bsp_claim_reports.budget_card_report_filters">
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Date From</div>
+                <div class="act_as_cell">Date To</div>
+            </div>
+            <div class="act_as_row">
+                <div class="act_as_cell">
+                    <span t-field="o.date_from"/>
+                </div>
+                <div class="act_as_cell">
+                    <span t-field="o.date_to"/>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.budget_card_lines_header">
+        <div class="act_as_thead">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Date</div>
+                <div class="act_as_cell">Reference</div>
+                <div class="act_as_cell">No.Jurnal</div>
+                <div class="act_as_cell">Input</div>
+                <div class="act_as_cell">Output</div>
+                <div class="act_as_cell">Balance</div>
+                <div class="act_as_cell">Tot.Allocation</div>
+                <div class="act_as_cell">Allocated</div>
+                <div class="act_as_cell">Ref.Allocated</div>
+                <div class="act_as_cell">Tot.UMP</div>
+
+            </div>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.budget_card_lines">
+        <div class="act_as_row lines">
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.date.strftime('%d-%m-%Y')"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.reference"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.move_name"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.ar_in)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.ar_out)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(ar_balance)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.alloc_amount)"/>
+            </div>
+
+            <div class="act_as_cell left"></div>
+            <div class="act_as_cell left"></div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.ump_amount)"/>
+            </div>
+
+        </div>
+   </template>
+
+    <template id="bsp_claim_reports.budget_card_lines_alloc">
+        <t t-foreach="partner_line.alloc_ids" t-as="alloc">
+            <div class="act_as_row lines">
+                <div class="act_as_cell left">
+                </div>
+                <div class="act_as_cell right">
+                </div>
+                <div class="act_as_cell left">
+                </div>
+                <div class="act_as_cell right">
+                </div>
+                <div class="act_as_cell right">
+                </div>
+                <div class="act_as_cell right">
+                </div>
+                <div class="act_as_cell right">
+                </div>
+                <div class="act_as_cell right" style="color: darkgoldenrod">
+                   <t t-esc="'{0:,.2f}'.format(alloc.alloc_value)"/>
+                </div>
+                <div class="act_as_cell left" style="color: darkgoldenrod">
+                    <t t-esc="alloc.alloc_number"/>
+                </div>
+                <div class="act_as_cell right">
+                </div>
+            </div>
+        </t>
+   </template>
+
+
+
+</odoo>

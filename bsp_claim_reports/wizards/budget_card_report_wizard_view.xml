@@ -1,0 +1,61 @@
+<odoo>
+
+    <record id="finane_claim_report_wizard_form" model="ir.ui.view">
+        <field name="name">finance.claim.report.wizard.form</field>
+        <field name="model">finance.claim.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group name="criteria">
+                     <group>
+                         <field name="operating_unit_id"
+                                options="{'no_create':True}"
+                                attrs="{'invisible':[('report_name','in',('arcard','aging','journal'))]}" />
+                         <field name="report_name" />
+                         <field name="coa_no"
+                                attrs="{'invisible':[('report_name','not in',('bm','bm_alloc'))]}" />
+                    </group>
+                    <group>
+                        <field name="date_from"  required='1'/>
+                        <field name="date_to" required='1'/>
+                        <field name="year_period"
+                            attrs="{'invisible':[('report_name','in',('arcard','aging','journal','monitor','bm','bk','bm_alloc','bk_alloc','claim_balance'))]}" />
+                        <field name="journal_ids" widget="many2many_tags"
+                        attrs="{'invisible':[('report_name','in',('arcard','aging','rcl','monitor','bm','bk','bm_alloc','bk_alloc','claim_balance'))],'required':[('report_name','in',('journal'))]}" />
+                    </group>
+                    <group>
+                        <field name="partner_ids" widget="many2many_tags"
+                        attrs="{'required':[('report_name','in',('arcard'))]}" />
+                    </group>
+                </group>
+                <footer>
+                    <button name="button_export_html" string="View"
+                            type="object" default_focus="1" class="oe_highlight"/>
+                    or
+                    <button name="button_export_pdf" string="Export PDF" type="object"/>
+                    or
+                    <button name="button_export_xlsx" string="Export XLSX" type="object"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="finance_claim_report_action" model="ir.actions.act_window">
+            <field name="name">Finance Report</field>
+            <field name="res_model">finance.claim.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="finance_claim_report_menu"
+              action="finance_claim_report_action"
+              parent="bsp_claim.menu_claim_report"
+              sequence="30"
+        />
+
+
+
+
+</odoo>

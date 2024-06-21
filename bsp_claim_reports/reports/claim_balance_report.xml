@@ -1,0 +1,205 @@
+<odoo>
+    <template id="report_buttons">
+        <div class="button_row">
+            <button class="o_finance_claim_reports_print btn btn-sm oe_button"><span class="fa fa-print"/>Print</button>
+            <button class="o_finance_claim_reports_export btn btn-sm oe_button"><span class="fa fa-download"/>Export</button>
+<!--            <button class="o_finance_claim_reports_download btn btn-sm oe_button"><span class="fa fa-download"/>Download DBF</button>-->
+             </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_bm_report_html">
+        <div class="o_finance_claim_reports_page">
+            <t t-call="bsp_claim_reports.report_buttons"/>
+            <t t-call="bsp_claim_reports.claim_balance_report_base"/>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_bk_report_html">
+        <div class="o_finance_claim_reports_page">
+            <t t-call="bsp_claim_reports.report_buttons"/>
+            <t t-call="bsp_claim_reports.claim_balance_report_base"/>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_bm_report_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="bsp_claim_reports.internal_layout">
+                    <t t-call="bsp_claim_reports.claim_balance_report_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="bsp_claim_reports.claim_bk_report_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="bsp_claim_reports.internal_layout">
+                    <t t-call="bsp_claim_reports.claim_balance_report_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="bsp_claim_reports.claim_balance_report_base">
+            <div class="page">
+                <div class="row">
+                    <t t-set="title">Claim BM Recapitupitulation</t>
+                    <t t-if="o.report_name == 'bk'">
+                       <t t-set="title">Claim BK Recapitupitulation</t>
+                    </t>
+                    <h4 class="mt0" t-esc="title" style="text-align: center;"/>
+                </div>
+                <!-- Display filters -->
+                <t t-call="bsp_claim_reports.claim_balance_report_filters"/>
+                <!-- Display stock card table -->
+                <div class="act_as_table data_table mt4" style="width: 100%;">
+                    <!-- Display header line-->
+                    <t t-call="bsp_claim_reports.claim_balance_lines_header"/>
+                     <t t-set="total_net_amount" t-value = "0.0"/>
+
+                    <t t-foreach="o.results" t-as="partner_line">
+                        <t t-set="total_net_amount" t-value="total_net_amount + partner_line.claim_id.net_amount"/>
+                        <t t-call="bsp_claim_reports.claim_balance_lines"/>
+                    </t>
+                    <!-- Display footer lines -->
+                    <div class="act_as_row lines">
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell">
+                            Total
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_net_amount)"/>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <p style="page-break-before:always;"></p>
+            </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_balance_report_filters">
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Date From</div>
+                <div class="act_as_cell">Date To</div>
+            </div>
+            <div class="act_as_row">
+                <div class="act_as_cell">
+                    <span t-field="o.date_from"/>
+                </div>
+                <div class="act_as_cell">
+                    <span t-field="o.date_to"/>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+
+
+
+
+    <template id="bsp_claim_reports.claim_balance_lines_header">
+        <div class="act_as_thead">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">No.</div>
+                <div class="act_as_cell">Program</div>
+                <div class="act_as_cell">Cabang</div>
+                <div class="act_as_cell">Tgl.Klaim</div>
+                <div class="act_as_cell">No.Klaim </div>
+                <div class="act_as_cell">Faktur Jasa</div>
+                <div class="act_as_cell">DPP</div>
+                <div class="act_as_cell">PPN</div>
+                <div class="act_as_cell">PPH</div>
+                <div class="act_as_cell">Jumlah</div>
+                <div class="act_as_cell">Realisasi</div>
+                <div class="act_as_cell">Balance</div>
+                <div class="act_as_cell">Tgl.BM/BK</div>
+                <div class="act_as_cell">Tgl.Approval Principal</div>
+                <div class="act_as_cell">Referensi Bank</div>
+                <div class="act_as_cell">Payment Voucher</div>
+                <div class="act_as_cell">Tot.Alokasi BM/BK</div>
+                <div class="act_as_cell">KODING</div>
+                <div class="act_as_cell">Principal</div>
+                <div class="act_as_cell">No.Klaim Principal</div>
+            </div>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_balance_lines">
+        <div class="act_as_row lines">
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.nomor"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.remark"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.operating_unit_id.code"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.name "/>
+            </div>
+
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.claim_date"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.service_inv"/>
+            </div>
+
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.claim_id.claim_amount"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.claim_id.tax_amount"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.claim_id.pph1_amount"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.claim_id.net_amount"/>
+            </div>
+             <div class="act_as_cell right">
+                <t t-esc="partner_line.claim_id.realization_amount"/>
+            </div>
+             <div class="act_as_cell right">
+                <t t-esc="partner_line.claim_id.balance_amount"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.lpayment_date"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.lpayment_app_date"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.lpayment_bankno"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.linvoices"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="partner_line.total_realisasi"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-if="partner_line.claim_id.coding">
+                    <t t-esc="partner_line.claim_id.coding.upper()"/>
+                </t>
+            </div>
+
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.partner_id.ref"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.claim_id.claim_letter"/>
+            </div>
+
+
+
+
+        </div>
+   </template>
+
+</odoo>

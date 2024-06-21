@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="width_list_view" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+    		   <link rel="stylesheet" href="/bsp_claim/static/src/css/listview.css"/>
+            </xpath>
+        </template>
+    </data>
+<!--    <data>-->
+<!--        <template id="assets_backend" name="web_onchange_action assets" inherit_id="web.assets_backend">-->
+<!--            <xpath expr="." position="inside">-->
+<!--                <script type="text/javascript" src="/bsp_claim/static/src/js/mine.js"></script>-->
+
+<!--            </xpath>-->
+<!--        </template>-->
+<!--    </data>-->
+
+</odoo>

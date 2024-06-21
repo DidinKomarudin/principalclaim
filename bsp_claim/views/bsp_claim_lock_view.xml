@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="bsp_claim_lock_search_view" model="ir.ui.view">
+        <field name="name">bsp.claim_lock.search</field>
+        <field name="model">bsp.claim.lock</field>
+        <field name="arch" type="xml">
+            <search string="Closing lock Claim">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="date_process"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_claim_lock_form" model="ir.ui.view">
+        <field name="name">bsp.claim.lock.form</field>
+        <field name="model">bsp.claim.lock</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <header>
+                        <button name="button_process" states="inactive"
+                                string="Activate"
+                                type="object"
+                                groups="bsp_claim.group_claim_manager"/>
+
+                        <button name="button_cancel" states="active"
+                                string="Non Active"
+                                type="object"
+                                groups="bsp_claim.group_claim_manager"/>
+
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="inactive,active"
+                               statusbar_colors='{"active":"blue", "inactive":"red"}'/>
+
+                </header>
+
+
+                <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Closing Lock Name:"/>
+                            <h1>
+                                <field name="name"   />
+                            </h1>
+
+                        </div>
+                        <group>
+                            <group colspan="2">
+
+                                <group>
+                                    <field name="date_from" />
+                                </group>
+                                <group>
+                                    <field name="date_to"/>
+                                </group>
+
+                            </group>
+
+                            <group colspan="2">
+                                <field name="date_process"/>
+
+                            </group>
+                        </group>
+
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsp_claim_lock_tree" model="ir.ui.view">
+        <field name="name">bsp.claim.lock.tree</field>
+        <field name="model">bsp.claim.lock</field>
+        <field name="arch" type="xml">
+            <tree string="Close Lock Claim List" >
+                 <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="date_process"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

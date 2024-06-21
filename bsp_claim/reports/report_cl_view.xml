@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="print_claim_letter_paper_format" model='report.paperformat'>
+            <field name="name"> Print Claim Letter Format</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">310</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <!--            <field name="header_spacing">15</field>-->
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+                id="action_report_print_form_claim_letter"
+                model="bsp.claim.cl"
+                menu="False"
+                string="Print Claim Letter (PDF)"
+                name="bsp_claim.mass_print_form_claim_letter_template"
+                file="bsp_claim.mass_print_form_claim_letter_template"
+                report_type="qweb-pdf"
+                paperformat="bsp_claim.print_claim_letter_paper_format"
+        />
+
+        <template id="mass_print_form_claim_letter_template">
+            <t t-call="web.basic_layout">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="o">
+                        <!--                         <t t-call="web.external_layout">-->
+                        <t t-if="o.state == 'draft'">
+                            <div class="page"  style="font-size:2;font-family:arial">
+                            <table width="100%">
+                                <thead>
+                                    <tr>
+<!--                                        <th style="width:15%;text-align:left;" align="left"></th>-->
+<!--                                        <th style="width:25%;text-align:left;" align="left"></th>-->
+<!--                                        <th style="width:30%;text-align:left;" align="right"></th>-->
+                                        <th style="text-align:right;" align="left">FM-APB-019</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align:right;" align="left">
+                                            <img src='/bsp_claim/static/src/img/header.jpg' style=" padding-bottom: 1px; height: 75px; width: 100%;"/>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+<!--                                    <tr>-->
+<!--                                        <td>-->
+<!--                                            <img src='/bsp_claim/static/src/img/company_logo.jpg' style=" padding-bottom: 1px; height: 75px; width: 110px;"/>-->
+<!--                                        </td>-->
+<!--                                        <td valign="center">-->
+<!--&lt;!&ndash;                                            <img src='/bsp_claim/static/src/img/address.jpg' style="display: block; padding-bottom: 5px; height: 65px; width: 230px;"/>&ndash;&gt;-->
+<!--                                            <span><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Jl. Taman Sari No. 12 Bandung-40116</span><br/>-->
+<!--                                            <span><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Telp : (022) 4207725 (Hunting)</span><br/>-->
+<!--                                            <span><![CDATA[&nbsp;]]><![CDATA[&nbsp;]]>Fax : (022) 4261035, 4261036</span><br/>-->
+<!--                                        </td>-->
+<!--                                        <td>-->
+<!--                                            <img src='/bsp_claim/static/src/img/iso9001.jpg' style=" padding-bottom: 1px; height: 75px; width: 250px;"/>-->
+<!--                                        </td>-->
+<!--                                        <td >-->
+<!--                                            <img src='/bsp_claim/static/src/img/iso_kan.jpg' style=" padding-bottom: 1px; height: 75px; width: 100%;"/>-->
+<!--                                        </td>-->
+<!--                                    </tr>-->
+
+                                    <tr style="border-top: 1px solid black;}">
+                                        <td >
+                                            <table width="100%">
+                                                <tr>
+                                                    <td align="left">
+                                                        <span t-esc="o.operating_unit_id.partner_id.city"></span>
+                                                        <span>,<![CDATA[&nbsp;]]> </span>
+                                                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y')"/><br/>
+                                                        <span>Kepada Yth.</span><br/>
+                                                        <span t-field="o.partner_id"></span><br/>
+                                                        <span t-field="o.contact_person"></span><br/>
+                                                        <span t-field="o.cp_tittle"></span><br/>
+                                                        <span t-esc="o.partner_id.street" style="white-space: nowrap;"></span><br/>
+                                                        <span t-esc="o.partner_id.city"></span><br/>
+                                                        <span t-esc="o.partner_id.country_id.name"></span><br/><br/>
+                                                    </td>
+
+                                                    <td class="text-right" t-if="o.state not in ('draft','pending')">
+                                                        <h1>
+                                                            <br/><span t-esc="o.state.upper()"></span>
+                                                        </h1>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <table style="white-space: nowrap;">
+                                                            <tr >
+                                                                <td align="left" width="200px"><span>No Surat Klaim</span></td>
+                                                                <td align="left" width="10px"><span>:</span></td>
+                                                                <td><span t-field="o.name"></span></td>
+                                                            </tr>
+                                                            <tr >
+                                                                <td align="left" width="200px"><span>Hal</span></td>
+                                                                <td  align="left" width="10px"><span>:</span></td>
+                                                                <td><span t-field="o.remark"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left" width="200px"><span>No KC</span></td>
+                                                                <td align="left" width="10px"><span>:</span></td>
+                                                                <td><span t-field="o.refdoc"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left" width="200px"><span>Principal Ref</span></td>
+                                                                <td align="left" width="10px"><span>:</span></td>
+                                                                <td><span t-field="o.vistex"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left" width="200px"><span>Outlet Ref</span></td>
+                                                                <td align="left" width="10px"><span>:</span></td>
+                                                                <td><span t-field="o.customer_ref"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left" width="200px"><span>Periode</span></td>
+                                                                <td align="left" width="10px"><span>:</span></td>
+                                                                <td><span t-field="o.period"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left" width="200px"><span>Lampiran</span></td>
+                                                                <td align="left" width="10px"><span>:</span></td>
+                                                                <td><span t-field="o.lampiran"></span></td>
+                                                            </tr>
+
+                                                        </table>
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <span><br/>Dengan Hormat,sehubungan dengan penggantian biaya atas <![CDATA[&nbsp;]]></span><span t-field="o.remark"></span><br/>
+                                                        <span>Bersama ini kami lampirkan kelengkapan klaim tersebut. Adapun besarnya klaim sebagai berikut:</span><br/>
+
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td colspan="2" align="center">
+                                                        <t t-if="not o.is_branch">
+                                                            <h5>
+                                                                <table>
+                                                                    <tr>
+                                                                        <td align="left" widht="150px"><span>Klaim</span></td>
+                                                                        <td align="left" widht="20px"><span>: Rp.<![CDATA[&nbsp;]]></span></td>
+                                                                        <td class="text-right"><span t-field="o.claim_amount"></span></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" widht="150px"> <span>PPN</span></td>
+                                                                        <td align="left" widht="20px"><span>: Rp.<![CDATA[&nbsp;]]></span></td>
+                                                                        <td class="text-right"><span t-field="o.tax_amount"></span></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left" widht="150px"> <span>PPH</span></td>
+                                                                        <td align="left" widht="20px"><span>: Rp.<![CDATA[&nbsp;]]></span></td>
+                                                                        <td class="text-right"><span t-field="o.pph1_amount"></span></td>
+                                                                    </tr>
+                                                                    <tr style="border-top: 1px solid black;font-weight: bold;">
+                                                                        <td><span>Total</span></td>
+                                                                        <td><span>: Rp.<![CDATA[&nbsp;]]></span></td>
+                                                                        <td class="text-right">
+                                                                            <span t-field="o.net_amount"></span><br/><br/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </h5>
+                                                        </t>
+                                                        <t t-if="o.is_branch">
+
+                                                                <table>
+                                                                    <tr>
+                                                                        <td align="left" widht="200px"><h5><span>TOTAL KLAIM : Rp. <![CDATA[&nbsp;]]></span></h5></td>
+        <!--                                                                <td align="left" widht="20px"><span>: Rp.<![CDATA[&nbsp;]]></span></td>-->
+                                                                        <td class="text-right"><h5><span t-field="o.net_amount"></span></h5></td>
+
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    </tr>
+                                                                </table>
+
+                                                        </t>
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <span>Atas sejumlah tersebut di atas, mohon agar dapat segera ditransfer ke rekening</span><br/>
+                                                        <span>PT. Bina San Prima sebagai berikut:</span><br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" colspan="2">
+                                                        <h5>
+                                                            <span t-esc="o.bank_id.bank_id.name"></span><span>,<![CDATA[&nbsp;]]> </span>
+                                                            <span t-esc="o.bank_id.bank_id.street"></span><span>,<![CDATA[&nbsp;]]> </span>
+                                                            <span t-esc="o.bank_id.bank_id.city"></span><span>,<![CDATA[&nbsp;]]> </span><br/>
+                                                            <span>No. Rekening<![CDATA[&nbsp;]]> </span><span t-esc="o.bank_id.acc_number"></span><br/>
+                                                            <span>Atas Nama<![CDATA[&nbsp;]]> </span><span t-esc="o.bank_id.company_id.name"></span><br/>
+                                                        </h5>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <span>Penggantian klaim kami tunggu paling lambat <![CDATA[&nbsp;]]></span>
+                                                        <span t-esc="o.payment_term_id.name"></span>
+                                                        <span><![CDATA[&nbsp;]]>setelah DN diterima oleh <![CDATA[&nbsp;]]></span>
+                                                        <span t-field="o.partner_id.name"></span>
+                                                         <span>(</span><span t-field="o.ref"></span><span>)</span>
+                                                        <br/>
+                                                        <span>Mohon dicantumkan juga nama pengirim/ perusahaan pada bukti transfer.</span> <br/>
+                                                        <span>Demikian kami sampaikan. Atas perhatian dan kerjasamanya, kami ucapkan terima kasih.</span> <br/><br/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="center" colspan="2">
+                                                        <t t-if="not o.is_branch">
+                                                            <span>Hormat Kami,</span><br/>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td  >
+                                            <t t-if="not o.is_branch">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td align="center" width="50%">
+                                                            <span>______________________</span><br/>
+                                                            <span>Account Payable Manager</span><br/><br/><br/>
+                                                        </td>
+                                                        <td align="center" width="50%">
+                                                            <span t-field="o.bm_name"></span><br/>
+                                                            <span>Brand Manager</span><br/><br/><br/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="left">
+                                                            <span>Cc File</span><br/>
+                                                        </td>
+                                                        <td align="center">
+                                                            <table class="table table-bordered mb-0" style="border: 1px solid black;" >
+                                                                <tr height="5px">
+                                                                    <td width="33,33%">
+                                                                        <span>Prepired</span>
+                                                                    </td>
+                                                                    <td width="33,33%">
+                                                                        <span>Reviewer I</span>
+                                                                    </td>
+                                                                    <td width="33,33%">
+                                                                        <span>Reviewer II</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>
+                                                                        <br/><br/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <br/><br/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <br/><br/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr height="5px">
+                                                                    <td>
+                                                                        <span>Staf</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span>Supervisor</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span>Ass Manager</span>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </t>
+                                            <t t-if="o.is_branch">
+                                                <table width="100%">
+                                                    <thead>
+                                                        <th style="width:20%;text-align:left;" align="left"></th>
+                                                        <th style="width:20%;text-align:left;" align="left"></th>
+                                                        <th style="width:20%;text-align:left;" align="left"></th>
+                                                        <th style="width:20%;text-align:left;" align="left"></th>
+                                                        <th style="width:20%;text-align:left;" align="left"></th>
+                                                        <th style="width:20%;text-align:left;" align="left"></th>
+
+                                                    </thead>
+                                                    <tbody>
+<!--                                                        <tr>-->
+<!--                                                            <td style="width:20%"></td>-->
+<!--                                                            <td style="width:20%"></td>-->
+<!--                                                            <td style="width:20%"></td>-->
+<!--                                                            <td style="width:20%"></td>-->
+<!--                                                            <td style="width:20%"></td>-->
+<!--                                                            <td style="width:20%"></td>-->
+<!--                                                        </tr>-->
+
+                                                        <tr>
+                                                            <td align="center" colspan="3">
+                                                                <span>Hormat Kami</span>
+                                                            </td>
+                                                            <td align="center" >
+                                                                <span>Menyetujui</span>
+                                                            </td>
+                                                            <td align="center" colspan="2">
+                                                                <span>BSP Pusat</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td >
+                                                               <br/> <br/> <br/>
+                                                            </td>
+                                                            <td >
+                                                               <br/> <br/> <br/>
+                                                            </td>
+                                                            <td >
+                                                               <br/> <br/> <br/>
+                                                            </td>
+                                                            <td >
+                                                               <br/> <br/> <br/>
+                                                            </td>
+                                                            <td >
+                                                               <br/> <br/> <br/>
+                                                            </td>
+                                                            <td >
+                                                               <br/> <br/> <br/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td >
+                                                               <strong>_______________</strong>
+                                                            </td>
+                                                            <td >
+                                                               <strong>_______________</strong>
+                                                            </td>
+                                                            <td >
+                                                               <strong>_______________</strong>
+                                                            </td>
+                                                            <td >
+                                                               <strong>_______________</strong>
+                                                            </td>
+                                                            <td >
+                                                               <strong>_______________</strong>
+                                                            </td>
+                                                            <td >
+                                                               <strong>_______________</strong>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td >
+                                                               <spa>Finance Supervisor</spa>
+                                                            </td>
+                                                            <td >
+                                                               <spa>Sales Supervisor</spa>
+                                                            </td>
+                                                            <td >
+                                                               <spa>Chief Of Branch</spa>
+                                                            </td>
+                                                            <td >
+                                                               <spa>Principal</spa>
+                                                            </td>
+                                                            <td >
+                                                               <spa>AP Manager</spa>
+                                                            </td>
+                                                            <td >
+                                                               <spa>Brand Manager</spa>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </t>
+
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <!--                        </t>-->
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

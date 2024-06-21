@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     <record id="claim_invoice_form_cancel_inherit" model="ir.ui.view">
+            <field name="name">claim.invoice.form.cancel.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_draft']" position="attributes">
+                    <attribute name="groups">account.group_account_manager</attribute>
+                </xpath>
+            </field>
+     </record>
+
+
+
+    <record id="claim_invoice_form_cancel_inherit_state" model="ir.ui.view">
+            <field name="name">claim.invoice.form.cancel.inherit.state</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cancel.invoice_supplier_cancel_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_invoice_cancel']" position="replace">
+                    <button name="action_invoice_cancel" type="object" states="draft,open" string="Cancel" groups="account.group_account_invoice"/>
+                </xpath>
+            </field>
+     </record>
+
+    <record id="claim_invoice_tree_inherit" model="ir.ui.view">
+            <field name="name">claim.invoice.tree.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+            <field name="arch" type="xml">
+                <field name="number" position="after">
+                    <field name="pvbis_id"/>
+                </field>
+            </field>
+     </record>
+
+    <record id="claim_invoice_form_supplier_inherit" model="ir.ui.view">
+            <field name="name">claim.invoice.form.supplier.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                 <button name="action_invoice_open" position="attributes">
+                    <attribute name="states"/>
+                    <attribute name="attrs">
+                        {
+                        'invisible':['|',('pvbis_id','!=',False),('state','not in',('draft'))]
+                        }
+                    </attribute>
+                </button>
+                <button name="action_invoice_cancel" position="attributes">
+                    <attribute name="confirm">
+                        Are sure to cancel this INVOICE?
+                    </attribute>
+
+                </button>
+                <xpath expr="//button[@name='action_invoice_draft']" position="after">
+                     <field name="pvbis_id" invisible="1" />
+                    <button name="send_invoice_ho" type="object" string="Send to HO"
+                            confirm="Are you sure want to send claim items to BIS AP?"
+                            attrs="{'invisible':['|',('pvbis_id','=',False),('state','!=','draft')]}"
+                            class="oe_highlight" groups="account.group_account_invoice"/>
+                </xpath>
+                <field name="date_due" position="after">
+                     <field name="pvbis_no" readonly="1" invisible="0" />
+                    <field name="ref" invisible="1"/>
+                    <field name="pvbis_id"
+                           options='{"no_create": True}'
+                           attrs="{'readonly':['|',('pvbis_no','!=',False),('state','!=','draft')]}"
+                           domain="[('type','=','pv'),('principal_code','=',ref),('state','=','open'),('alloc_amount','=',0)]" />
+
+                </field>
+
+                <xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="replace">
+                    <field name="product_id"  options='{"no_create": True}'/>
+                </xpath>
+
+                <xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="before">
+                    <field name="claimcl_id"  options='{"no_create": True}'/>
+<!--                    domain="[('partner_id','=',parent.partner_id),('state','in',('paid','post'))]" /> -->
+                    <field name="branch_code" force_save="1" attrs="{'readonly':[('claimcl_id','!=',False)]}"/>
+                </xpath>
+
+                <xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='name']" position="after">
+                    <field name="document_date"/>
+                    <field name="balance_amount"/>
+                </xpath>
+
+                <xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='account_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//notebook/page/field[@name='invoice_line_ids']/tree/field[@name='quantity']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+<!--                <xpath expr="//notebook/page/field[@name='amount_tax']" position="after">-->
+                    <field name="amount_untaxed" position="attributes">
+                      <attribute name="string">Claims Amount</attribute>
+                    </field>
+                    <field name="amount_tax" position="after">
+                    <field name="invoice_amount"/>
+                    <field name="correction_amount" string="Additional Amount"/>
+                    </field>
+<!--                </xpath>-->
+
+            </field>
+     </record>
+
+
+</odoo>
+

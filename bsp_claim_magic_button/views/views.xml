@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_company_form" model="ir.ui.view">
+            <field name="name">res.company.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//form/sheet" position="before">
+                    <header>
+                        <button name="test_button" custom="click" string="Jangan Dipencet !!!" class="btn-primary"/>
+                    </header>
+                </xpath>
+
+            </field>
+        </record>
+
+        <template id="assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/bsp_claim_magic_button/static/src/js/test.js"></script>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

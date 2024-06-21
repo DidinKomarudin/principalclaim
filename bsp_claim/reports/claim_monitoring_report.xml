@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="claim_monitoring_report_search_view" model="ir.ui.view">
+        <field name="name">bsp.claim.monitoring.report.search</field>
+        <field name="model">bsp.claim.monitoring</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Claim Monitoring">
+                <field name="claim_id"/>
+                <field name="cn_id"/>
+<!--                groups="bsp_claim.group_cn_allocation"/>-->
+                <field name="refund_id" />
+                <field name="pay_id" />
+<!--                groups="bsp_claim.group_account_invoice"/>-->
+                <field name="branch" />
+                <field name="principal" />
+                <field name="claim_date"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_claim_monitoring_report_tree">
+        <field name="name">bsp.claim.monitoring.report.tree</field>
+        <field name="model">bsp.claim.monitoring</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Claim Monitoring" create="0" delete="0">
+                <field name="claim_id"/>
+<!--                <field name="claim_desc"/>-->
+<!--                    <field name="branch" />-->
+<!--                    <field name="principal" />-->
+                    <field name="claim_date"/>
+                    <field name="claim_age"/>
+                    <field name="state"/>
+
+                <field name="cn_id"/>
+                <field name="cn_total" sum="Total CN" />
+                <field name="alloc_total" sum="Total Alloc"/>
+                <field name="withdraw_total" />
+<!--                groups="bsp_claim.group_cn_allocation"/>-->
+                <field name="refund_id"/>
+                <field name="refund_total" sum="Total Refund" />
+                <field name="pay_id"/>
+                <field name="pay_total" sum="Total Payment" />
+                <field name="balance_total" sum="Total Balance" />
+<!--                groups="bsp_claim.group_account_invoice"/>-->
+
+
+            </tree>
+        </field>
+    </record>
+
+
+</odoo>

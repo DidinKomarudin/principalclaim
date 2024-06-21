@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bsp_claim_bis_synch_all,bsp_claim_bis_synch_all,model_bsp_claim_bis_synch,,1,1,1,1
+access_bsp_claim_bis_synch_line_all,bsp_claim_bis_synch_line_all,model_bsp_claim_bis_synch_line,,1,1,1,1
+access_bsp_pv_bis_synch_all,bsp_pv_synch_all,model_bsp_payment_voucher_synch,,1,1,1,1
+access_bsp_pv_bis_synch_line_all,bsp_pv_synch_line_all,model_bsp_payment_voucher_synch_line,,1,1,1,1

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="bsp_claim_print_view" model="ir.ui.view">
+        <field name="name">wizard.bsp.claim.print.view</field>
+        <field name="model">wizard.bsp.claim.print</field>
+        <field name="arch" type="xml">
+            <form string="Print Claim Letter">
+                <p class="oe_grey">
+                    Print this Claim Letter?
+                </p>
+                <br/>
+                <p class="oe_grey">
+                    Note : Only draft documents will be printed, please check it
+                </p>
+                <footer>
+                    <button string="Print" class="btn-primary" name="print_report" type="object" />
+                    <button string="Cancel" class="btn-primary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="bsp_claim_print_views" model="ir.ui.view">
+        <field name="name">BSP Claim</field>
+        <field name="model">bsp.claim.print.docx</field>
+        <field name="arch" type="xml">
+            <form string="BSP Claim">
+                <group>
+                    <field name="file_name" filename="bsp_claim_data" />
+                    <field name="bsp_claim_data" invisible="1" />
+                </group>
+                <footer>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

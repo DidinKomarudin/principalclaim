@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2020 PT Bina San Prima
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+
+    <record id="parameter_memcache_host_and_port" model="ir.config_parameter">
+        <field name="key">memcache_host_and_port</field>
+        <field name="value">localhost:11211</field>
+        <field name="active">1</field>
+    </record>
+
+</odoo>

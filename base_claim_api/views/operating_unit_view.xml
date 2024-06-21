@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="view_operating_unit_form" model="ir.ui.view">
+            <field name="name">operating.unit.form</field>
+            <field name="model">operating.unit</field>
+            <field name="inherit_id" ref="operating_unit_extend.view_operating_unit_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook" position="inside">
+                    <page string="API Configuration">
+                        <group>
+                            <group string="BIS">
+                                <field name="host_bis"/>
+                                <field name="database_bis"/>
+                                <field name="username_bis"/>
+                                <field name="password_bis" password="True"/>
+                                <field name="port_bis"/>
+                            </group>
+                            <group string="Odoo">
+                                <field name="host"/>
+                                <field name="database"/>
+                                <field name="username"/>
+                                <field name="password" password="True"/>
+                                <field name="port"/>
+                            </group>
+                            <group>
+                                <button name="test_connection_bis" type="object" string="Test Connection" icon="fa-plug"/>
+                            </group>
+                            <group>
+                                <button name="test_connection" type="object" string="Test Connection" icon="fa-plug"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

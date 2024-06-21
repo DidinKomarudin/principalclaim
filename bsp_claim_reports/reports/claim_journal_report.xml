@@ -1,0 +1,136 @@
+<odoo>
+    <template id="report_buttons">
+        <div class="button_row">
+            <button class="o_finance_claim_reports_print btn btn-sm oe_button"><span class="fa fa-print"/>Print</button>
+            <button class="o_finance_claim_reports_export btn btn-sm oe_button"><span class="fa fa-download"/>Export</button>
+            <button class="o_finance_claim_reports_download btn btn-sm oe_button"><span class="fa fa-download"/>Download DBF</button>
+             </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_journal_report_html">
+        <div class="o_finance_claim_reports_page">
+            <t t-call="bsp_claim_reports.report_buttons"/>
+            <t t-call="bsp_claim_reports.claim_journal_report_base"/>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_journal_report_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="bsp_claim_reports.internal_layout">
+                    <t t-call="bsp_claim_reports.claim_journal_report_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="bsp_claim_reports.claim_journal_report_base">
+            <div class="page">
+                <div class="row">
+                    <t t-set="title">Claim Journal</t>
+                    <h4 class="mt0" t-esc="title" style="text-align: center;"/>
+                </div>
+                <!-- Display filters -->
+                <t t-call="bsp_claim_reports.claim_journal_report_filters"/>
+                <!-- Display stock card table -->
+                <div class="act_as_table data_table mt4" style="width: 100%;">
+                    <!-- Display header line-->
+                    <t t-call="bsp_claim_reports.claim_journal_lines_header"/>
+                     <t t-set="total_debet" t-value = "0.0"/>
+                    <t t-set="total_credit" t-value = "0.0"/>
+                    <t t-foreach="o.results" t-as="partner_line">
+                        <t t-set="total_debet" t-value="total_debet + partner_line.debet"/>
+                        <t t-set="total_credit" t-value="total_credit + partner_line.credit"/>
+
+                        <t t-call="bsp_claim_reports.claim_journal_lines"/>
+                    </t>
+                    <!-- Display footer lines -->
+                    <div class="act_as_row lines">
+                        <div class="act_as_cell"/>
+                        <div class="act_as_cell">
+                            Total
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_debet)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(total_credit)"/>
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <p style="page-break-before:always;"></p>
+            </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_journal_report_filters">
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Date From</div>
+                <div class="act_as_cell">Date To</div>
+            </div>
+            <div class="act_as_row">
+                <div class="act_as_cell">
+                    <span t-field="o.date_from"/>
+                </div>
+                <div class="act_as_cell">
+                    <span t-field="o.date_to"/>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.claim_journal_lines_header">
+        <div class="act_as_thead">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">FNOBON</div>
+                <div class="act_as_cell">FTGL</div>
+                <div class="act_as_cell">FNO</div>
+                <div class="act_as_cell">FBCCDNOACC</div>
+                <div class="act_as_cell">FBCCDCOANO</div>
+                <div class="act_as_cell">FNOACC</div>
+                <div class="act_as_cell">FURAIAN</div>
+                <div class="act_as_cell">FDEBET</div>
+                <div class="act_as_cell">FKREDIT</div>
+
+            </div>
+        </div>
+    </template>
+    <template id="bsp_claim_reports.claim_journal_lines">
+        <div class="act_as_row lines">
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.journalno"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.journaldate"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.journalidx"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.account_id.group_id.code_prefix"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.account_id.group_id.name"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.account_id.code"/>
+            </div>
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.account_id.name"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.debet)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.credit)"/>
+            </div>
+
+
+        </div>
+   </template>
+
+</odoo>

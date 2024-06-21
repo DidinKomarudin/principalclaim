@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="claim_analysis_pivot" model="ir.ui.view">
+         <field name="name">claim.analysis.pivot</field>
+         <field name="model">claim.analysis</field>
+         <field name="arch" type="xml">
+            <pivot string="claim Analysis" disable_linking="True">
+                <field name="branch_id" type="col"/>
+                <field name="claim_type" type="col"/>
+                <field name="partner_id" type="col"/>
+                <field name="coll_date" type="row"/>
+
+                 <field name="net_amount" type="measure"/>
+                <field name="realization_amount" type="measure"/>
+                <field name="balance_amount" type="measure"/>
+             </pivot>
+         </field>
+    </record>
+
+    <record id="claim_analysis_pivot_search" model="ir.ui.view">
+        <field name="name">claim.analysis.search</field>
+        <field name="model">claim.analysis</field>
+        <field name="arch" type="xml">
+            <search string="claim Analysis">
+                <field name="claim_type"/>
+                <field name="claimcl_id"/>
+<!--                <field name="claim_id"/>-->
+                <field name="partner_id"/>
+                <field name="invoice_ids"/>
+<!--                <field name="payment_ids"/>-->
+                <filter name="branch_id" />
+<!--                string="Branch" domain="[('claim_id.branch_code', '=', 'BLG')]"/>-->
+                <separator/>
+                <filter name="Principal"/>
+<!--                string="Principal" domain="[('claimcl_id.ref', '=', 'NFI')]"/>-->
+                <separator/>
+                <filter string="This Year" name="year" domain="[('coll_date','&lt;=', time.strftime('%%Y-12-31')),('coll_date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Claim Type" name="claimtype" context="{'group_by':'claim_type'}"/>
+                    <filter string="Claim Coll" name="claimcoll" context="{'group_by':'claimcl_id'}"/>
+                    <filter string="Principal" name="principal" context="{'group_by':'partner_id'}"/>
+                    <filter string="Branch" name="branch" context="{'group_by':'branch_id'}"/>
+<!--                    <filter string="Coll Invoice" name="Invoice" context="{'group_by':'invoice_id'}"/>-->
+<!--                    <filter string="Claim" name="claim" context="{'group_by':'claim_id'}"/>-->
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

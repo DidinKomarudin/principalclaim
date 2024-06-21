@@ -1,0 +1,8 @@
+<odoo>
+
+    <!-- Tambahan agung untuk invisible menu -->
+    <record id="make_invisible" model="res.groups">
+        <field name="name">Allow to access invisible menu</field>
+    </record>
+
+</odoo>

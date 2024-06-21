@@ -1,0 +1,90 @@
+<odoo>
+        <record id="bsp_claim_bis_synch_search_view" model="ir.ui.view">
+            <field name="name">bsp.claim.bis.synch.search</field>
+            <field name="model">bsp.claim.bis.synch</field>
+            <field name="arch" type="xml">
+                <search string="BIS Stock Import">
+                    <field name="operating_unit_id"/>
+                    <field name="partner_ids"/>
+                    <field name="fromdate"/>
+                    <field name="todate"/>
+                    <field name="state"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="bsp_claim_bis_synch_view_tree" model="ir.ui.view">
+            <field name="name">bsp.claim.bis.synch.tree</field>
+            <field name="model">bsp.claim.bis.synch</field>
+            <field name="arch" type="xml">
+                <tree string="BIS Stock Import">
+                    <field name="operating_unit_id"/>
+                    <field name="partner_ids"/>
+                    <field name="fromdate"/>
+                    <field name="todate"/>
+                    <field name="state"/>
+                    <field name="lastdate"/>
+                     <field name="type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="bsp_claim_bis_synch_view_form" model="ir.ui.view">
+            <field name="name">bsp.claim.bis.synch.form</field>
+            <field name="model">bsp.claim.bis.synch</field>
+            <field name="arch" type="xml">
+                <form string="BIS Claim Synchronization">
+                    <header>
+                        <button name="action_get_claim_bis" string="Synch CN with BIS" class="oe_highlight" type="object" icon="fa-refresh"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="open,cancel,done"
+                               statusbar_colors='{"open":"blue", "done":"white", "cancel":"red"}'/>
+                    </header>
+                    <sheet>
+                        <group col="4">
+                            <field name="operating_unit_id" options="{'no_open':True,'no_create':True}"/>
+                            <field name="partner_ids" widget="many2many_tags" options="{'no_open':True,'no_create':True}"/>
+                            <field name="fromdate"/>
+                            <field name="todate"/>
+                             <field name="lastdate" readonly="1"/>
+                             <field name="type"/>
+                        </group>
+                        <notebook>
+                            <page name="SynchResults" string="Synchronization Results">
+                                <field name="line_ids" readonly="1">
+                                    <tree>
+                                        <field name="synch_date"/>
+                                        <field name="cn_id"/>
+                                        <field name="synch_status"/>
+                                        <field name="remark"/>
+                                    </tree>
+                                </field>
+                            </page>
+                    </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <record id="synch_claim_from_bis_action" model="ir.actions.act_window">
+            <field name="name">CN BIS Sychronization</field>
+            <field name="res_model">bsp.claim.bis.synch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+             <field name="search_view_id" ref="bsp_claim_bis_synch_search_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your Synch Histories.
+                </p>
+            </field>
+        </record>
+
+
+
+        <menuitem id="synch_claim_from_bis_menu"
+              action="synch_claim_from_bis_action"
+              parent="bsp_claim.menu_claim_config"
+              sequence="20"
+        />
+
+</odoo>

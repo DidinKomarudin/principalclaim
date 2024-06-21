@@ -1,0 +1,267 @@
+<odoo>
+
+    <template id="cl_recap_report_html">
+        <div class="o_finance_claim_reports_page">
+            <t t-call="bsp_claim_reports.report_buttons"/>
+            <t t-call="bsp_claim_reports.cl_recap_report_base"/>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.cl_recap_report_pdf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="bsp_claim_reports.internal_layout">
+                    <t t-call="bsp_claim_reports.cl_recap_report_base"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="bsp_claim_reports.cl_recap_report_base">
+        <t t-foreach="o.partner_ids" t-as="partner">
+            <div class="page">
+                <div class="row">
+                    <t t-set="title">CL Recap - <t t-raw="partner.name"/>
+                    </t>
+                    <h4 class="mt0" t-esc="title" style="text-align: center;"/>
+                </div>
+                <!-- Display filters -->
+                <t t-call="bsp_claim_reports.cl_recap_report_filters"/>
+                <!-- Display stock card table -->
+                <div class="act_as_table data_table mt4" style="width: 100%;">
+                    <!-- Display header line-->
+                    <t t-call="bsp_claim_reports.cl_recap_lines_header"/>
+                    <!-- Display each lines -->
+                    <t t-set="totcl" t-value = "0.0"/>
+                    <t t-set="totcl_alloc" t-value = "0.0"/>
+                    <t t-set="totclclaim_alloc" t-value = "0.0"/>
+                    <t t-set="totclnotclaim_alloc" t-value = "0.0"/>
+                    <t t-set="totclpaid_alloc" t-value = "0.0"/>
+                    <t t-set="totclnotpaid_alloc" t-value = "0.0"/>
+                    <t t-set="totcl_notalloc" t-value = "0.0"/>
+                    <t t-set="totclclaim_notalloc" t-value = "0.0"/>
+                    <t t-set="totclnotclaim_notalloc" t-value = "0.0"/>
+                    <t t-set="totclpaid_notalloc" t-value = "0.0"/>
+                    <t t-set="totclnotpaid_notalloc" t-value = "0.0"/>
+                    <t t-set="totclclaim" t-value = "0.0"/>
+                    <t t-set="totclnotclaim" t-value = "0.0"/>
+                    <t t-set="totclpaid" t-value = "0.0"/>
+                    <t t-set="totclnotpaid" t-value = "0.0"/>
+
+                    <t t-foreach="o.results.filtered(lambda l: l.partner_id == partner)" t-as="partner_line">
+                        <t t-set="totcl" t-value = "totcl + partner_line.totalcl"/>
+                        <t t-set="totcl_alloc" t-value = "totcl_alloc + partner_line.alloctotalcl"/>
+                        <t t-set="totclclaim_alloc" t-value = "totclclaim_alloc + partner_line.alloctotalclaim"/>
+                        <t t-set="totclnotclaim_alloc" t-value = "totclnotclaim_alloc + partner_line.alloctotalnotclaim"/>
+                        <t t-set="totclpaid_alloc" t-value = "totclpaid_alloc + partner_line.alloctotalpaid"/>
+                        <t t-set="totclnotpaid_alloc" t-value = "totclnotpaid_alloc + partner_line.alloctotalnotpaid"/>
+                        <t t-set="totcl_notalloc" t-value = "totcl_notalloc + partner_line.notalloctotalcl"/>
+                        <t t-set="totclclaim_notalloc" t-value = "totclclaim_notalloc + partner_line.notalloctotalclaim"/>
+                        <t t-set="totclnotclaim_notalloc" t-value = "totclnotclaim_notalloc + partner_line.notalloctotalnotclaim"/>
+                        <t t-set="totclpaid_notalloc" t-value = "totclpaid_notalloc + partner_line.notalloctotalpaid"/>
+                        <t t-set="totclnotpaid_notalloc" t-value = "totclnotpaid_notalloc + partner_line.notalloctotalnotpaid"/>
+                        <t t-set="totclclaim" t-value = "totclclaim + partner_line.totalclaim"/>
+                        <t t-set="totclnotclaim" t-value = "totclnotclaim + partner_line.totalnotclaim"/>
+                        <t t-set="totclpaid" t-value = "totclpaid + partner_line.totalpaid"/>
+                        <t t-set="totclnotpaid" t-value = "totclnotpaid + partner_line.totalnotpaid"/>
+                        <t t-call="bsp_claim_reports.cl_recap_lines"/>
+                    </t>
+                    <!-- Display footer lines -->
+                    <div class="act_as_row lines">
+                        <div class="act_as_cell">
+                            Total
+                        </div>
+
+
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totcl_alloc)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclclaim_alloc)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclnotclaim_alloc)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclpaid_alloc)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclnotpaid_alloc)"/>
+                        </div>
+
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totcl_notalloc)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclclaim_notalloc)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclnotclaim_notalloc)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclpaid_notalloc)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclnotpaid_notalloc)"/>
+                        </div>
+
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totcl)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclclaim)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclnotclaim)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclpaid)"/>
+                        </div>
+                        <div class="act_as_cell right">
+                            <t t-esc="'{0:,.2f}'.format(totclnotpaid)"/>
+                        </div>
+                    </div>
+
+                </div>
+                <p style="page-break-before:always;"></p>
+            </div>
+        </t>
+    </template>
+
+    <template id="bsp_claim_reports.cl_recap_report_filters">
+        <div class="act_as_table data_table" style="width: 100%;">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Branch</div>
+                <div class="act_as_cell">Year Period</div>
+            </div>
+            <div class="act_as_row">
+                <div class="act_as_cell">
+                    <span t-field="o.operating_unit_id.name"/>
+                </div>
+                <div class="act_as_cell">
+                    <span t-field="o.year_period"/>
+                </div>
+
+            </div>
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.cl_recap_lines_header">
+        <div class="act_as_thead">
+             <div class="act_as_row labels">
+                 <div class="act_as_cell"/>
+                 <div  class="act_as_cell">Total Sudah Alokasi</div>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell">Total Belum Alokasi</div>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell">Total CL</div>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+                 <div class="act_as_cell"/>
+             </div>
+        </div>
+        <div class="act_as_thead">
+            <div class="act_as_row labels">
+                <div class="act_as_cell">Bulan</div>
+
+<!--                <div class="act_as_table data_table" style="width: 100%;">-->
+<!--                    <div class="act_as_row labels">-->
+<!--                        <div class="act_as_cell">Total Sudah Alokasi</div>-->
+<!--                        <div class="act_as_cell">Total Belum Alokasi</div>-->
+<!--                    </div>-->
+<!--                    <div class="act_as_row">-->
+<!--                        <div class="act_as_cell">-->
+                              <div class="act_as_cell">Total CL</div>
+                              <div class="act_as_cell">Sudah Klaim</div>
+                              <div class="act_as_cell">Belum Klaim</div>
+                              <div class="act_as_cell">Sudah Penggantian</div>
+                              <div class="act_as_cell">Belum Penggantian</div>
+<!--                        </div>-->
+<!--                        <div class="act_as_cell">-->
+                              <div class="act_as_cell">Total CL</div>
+                              <div class="act_as_cell">Sudah Klaim</div>
+                              <div class="act_as_cell">Belum Klaim</div>
+                              <div class="act_as_cell">Sudah Penggantian</div>
+                              <div class="act_as_cell">Belum Penggantian</div>
+
+<!--                        </div>-->
+
+<!--                      </div>-->
+<!--                </div>-->
+                <div class="act_as_cell">Total CL</div>
+                <div class="act_as_cell">Sudah Klaim</div>
+                <div class="act_as_cell">Belum Klaim</div>
+                <div class="act_as_cell">Sudah Penggantian</div>
+                <div class="act_as_cell">Belum Penggantian</div>
+
+
+            </div>
+
+        </div>
+    </template>
+
+    <template id="bsp_claim_reports.cl_recap_lines">
+        <div class="act_as_row lines">
+            <div class="act_as_cell left">
+                <t t-esc="partner_line.monthname"/>
+            </div>
+
+
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.alloctotalcl)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.alloctotalclaim)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.alloctotalnotclaim)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.alloctotalpaid)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.alloctotalnotpaid)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.notalloctotalcl)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.notalloctotalclaim)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.notalloctotalnotclaim)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.notalloctotalpaid)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.notalloctotalnotpaid)"/>
+            </div>
+
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.totalcl)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.totalclaim)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.totalnotclaim)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.totalpaid)"/>
+            </div>
+            <div class="act_as_cell right">
+                <t t-esc="'{0:,.2f}'.format(partner_line.totalnotpaid)"/>
+            </div>
+
+        </div>
+   </template>
+
+</odoo>

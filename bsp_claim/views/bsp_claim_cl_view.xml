@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<!--    <template id="assets_backend" name="hide_button_edit_by_state assets" inherit_id="web.assets_backend">-->
+<!--      <xpath expr="." position="inside">-->
+<!--        <script type="text/javascript" src="/bsp_claim/static/src/js/mine.js"/>-->
+<!--      </xpath>-->
+<!--    </template>-->
+
+    <record id="bsp_claim_cl_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.claim.search.form</field>
+        <field name="model">bsp.claim.cl</field>
+        <field name="arch" type="xml">
+            <search string="Claim Collection to Principal">
+<!--                <field name="branch_code"/>-->
+                    <filter name="draft" string="Draft" domain="[('state','=','draft')]" help="Draft Claims"/>
+                    <filter name="pending" string="Pending" domain="[('state','=', 'pending')]" help="Pending claims"/>
+                    <filter name="incomplete" string="In-Complete" domain="[('state','=', 'incomplete')]" help="In-Complete claims"/>
+                    <filter name="post" string="Post" domain="[('state','=','post')]" help="Post Claims"/>
+                    <filter name="paid" string="Paid" domain="[('state','=','paid')]" help="Paid Claims"/>
+                    <filter name="done" string="Done" domain="[('state','=','done')]" help="Claims already processed"/>
+                    <filter name="cancel" string="Cancelled" domain="[('state','=', 'cancel')]" help="Cancelled Claims"/>
+                    <filter name="reject" string="Rejected" domain="[('state','=', 'reject')]" help="Rejected Claims"/>
+                    <filter name="has_bm" string="Bank Masuk" domain="[('has_bm','=', True)]" help="Has Bank Masuk"/>
+                    <filter name="has_bk" string="Bank Keluar" domain="[('has_bk','=', True)]" help="Has Bank Keluar"/>
+                    <separator/>
+                <field name="operating_unit_id"/>
+                <field name="depo_id"/>
+                <field name="invoice_ids"/>
+                <field name="payment_ids"/>
+                <field name="bmbk_ids"/>
+                <field name="lpayment_date" string="BM/BK Date (YYYY/MM/DD)"/>
+<!--                <field name="kx_id" />-->
+<!--                <field name="period"/>-->
+<!--                <field name="claim_type"/>-->
+                <field name="claim_type_id"/>
+                <field name="has_bm"/>
+                <field name="has_bk"/>
+                <field name="name"/>
+                <field name="claim_date"/>
+                <field name="state"/>
+                <field name="partner_id"/>
+                <field name="isclaim_in_budget"/>
+                <field name="is_nonclaim"/>
+                <field name="remark"/>
+                <field name="customer_ref"/>
+                <field name="claim_letter"/>
+<!--                <field name="claim_amount"/>-->
+<!--                <field name="realization_amount"/>-->
+<!--                <field name="invoice_id"/>-->
+                <field name="claim_age"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_claim_cl_form" model="ir.ui.view">
+        <field name="name">bsp.claim.cl.form</field>
+        <field name="model">bsp.claim.cl</field>
+        <field name="arch" type="xml">
+            <form string="Form Claim Collection" delete="0">
+<!--                <form>-->
+                <header>
+                        <button name="button_draft" states="pending,reject,cancel"
+                                string="Reset to Draft"
+                                confirm="Are you sure want to RESET this claim?"
+                                type="object"
+                                groups="bsp_claim.group_claim_spv"/>
+                        <button name="button_to_pending" states="incomplete,post"
+                                string="Reset to Pending"
+                                confirm="Are you sure want to RESET this claim?"
+                                type="object"
+                                groups="bsp_claim.group_claim_asmen"/>
+                        <button name="button_pending"
+                                string="Set to Pending" type="object"
+                                confirm="Are you sure want to PENDING this claim?"
+                                class="oe_highlight"
+                                groups="bsp_claim.group_claim_branch_spv,bsp_claim.group_claim_spv"
+                                attrs="{'invisible': ['|',('is_pending_invisible','=',True),('print_count','=',0)]}"/>
+                        <button name="button_reject" states="post"
+                                string="Reject" type="object"
+                                confirm="Are you sure want to REJECT this claim?"
+                                class="oe_highlight"
+                                groups="bsp_claim.group_claim_asmen"/>
+                        <button name="button_incomplete" states="pending"
+                                string="In-Complete"
+                                type="object"
+                                class="oe_highlight"
+                                groups="bsp_claim.group_claim_user"/>
+                        <button name="button_post" states="pending,incomplete"
+                                string="Approve"
+                                type="object"
+                                class="oe_highlight"
+                                groups="bsp_claim.group_claim_user"/>
+                        <button name="button_paid" states="post,paid"
+                                string="Ready to Paid"
+                                confirm="Are you sure want to PAID this claim?"
+                                type="object"
+                                class="oe_highlight"
+                                groups="bsp_claim.group_claim_user"/>
+                        <button name="button_done" states="paid"
+                                string="Done"
+                                type="object"
+                                class="oe_highlight"
+                                groups="bsp_claim.group_claim_manager"/>
+                        <button name="button_cancel"
+                                string="Cancel"
+                                confirm="Are you sure want to CANCEL this claim?"
+                                type="object"
+                                groups="bsp_claim.group_claim_branch_spv,bsp_claim.group_claim_spv"
+                                attrs="{'invisible': [('is_cancel_invisible','=',True)]}"
+                                />
+<!--                        <button name="%(bsp_claim.action_report_print_form_claim_letter)d"-->
+                        <button name='button_print_claim'
+                            string="Print as .PDF"
+                            type="object"
+                            attrs="{'invisible':[('state', '!=', 'draft')]}"/>
+                        <button name="%(bsp_claim.action_bsp_claim_print)d"
+                            string="Print as .DOCX"
+                            type="action"
+                            attrs="{'invisible':[('state', '!=', 'draft')]}"/>
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,pending,incomplete,post,paid,done,reject,cancel"
+                               statusbar_colors='{"incomplete":"yellow", "post":"blue", "reject":"orange", "cancel":"red"}'/>
+
+                </header>
+                <sheet>
+<!--                    <div class="oe_button_box" name="button_box">-->
+<!--                        <button type="object"  name="action_invoice_in_refund"-->
+<!--                            class="oe_stat_button"-->
+<!--                            icon="fa-pencil-square-o" attrs="{'invisible':['|', ('invoice_count', '=', 0), ('state', 'in', ('draft','pending','cancel'))]}">-->
+<!--                            <field name="invoice_count" widget="statinfo" string="Vendor Refund"/>-->
+<!--                            <field name='invoice_ids' invisible="1"/>-->
+<!--                        </button>-->
+<!--                    </div>-->
+                    <div class="oe_button_box" name="button_box">
+<!--                            <button class="oe_stat_button" name="button_invoice_entries"-->
+<!--                                    string="Invoice Items" type="object"-->
+<!--                                    attrs="{'invisible':[('invoice_line_ids','=',[])]}" icon="fa-bars"/>-->
+                            <field name="invoice_line_ids" invisible="1"/>
+                            <button class="oe_stat_button" name="button_journal_entries"
+                                    string="Journal Items" type="object"
+                                    attrs="{'invisible':[('move_line_ids','=',[])]}" icon="fa-bars"/>
+                            <field name="move_line_ids" invisible="1"/>
+                            <button class="oe_stat_button" name="button_invoices"
+                                    type="object" attrs="{'invisible':[('invoice_line_ids','=',[])]}" icon="fa-bars">
+                                    <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="invoice_count" widget="statinfo" nolabel="1" class="mr4"/>
+                                    </span>
+                                    <span class="o_stat_text">Invoice(s)</span>
+                                    </div>
+                            </button>
+                            <button class="oe_stat_button" name="open_payment_matching_screen" type="object"
+                                    attrs="{'invisible':[('payment_count','=',0)]}" icon="fa-university">
+                                 <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="payment_count" widget="statinfo" nolabel="1" class="mr4"/>
+                                    </span>
+                                    <span class="o_stat_text">Payment(s)</span>
+                                </div>
+                            </button>
+<!--                            <field name="payment_count" invisible="1"/>-->
+                    </div>
+                    <div class="oe_title">
+                        <table width="100%">
+                            <tr>
+                                <td width="70%">
+                                   <label for="name" string="Claim Collection No:"/>
+                                    <h1>
+                                        <field name="name" class="oe_inline" readonly="1" force_save="1"/>
+                                    </h1>
+                                </td>
+                                <td>
+                                    <group>
+                                        <field name="print_count"/>
+                                    </group>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                            <field name="is_editable" invisible="1"/>
+                            <field name="is_editable_pusat" invisible="1"/>
+                            <field name="is_branch" invisible="1"/>
+                            <field name="ref" invisible="1"/>
+                            <field name="is_from_bis" invisible="1"/>
+                            <field name="is_can_partial" invisible="1"/>
+                            <field name="branch_code" invisible="1"/>
+                            <field name="user_title" invisible="1"/>
+                            <field name="is_cancel_invisible" invisible="1"/>
+                            <field name="is_pending_invisible" invisible="1"/>
+                            <field name="is_usrdoc_match" invisible="1"/>
+                            <field name="is_claim_ready" invisible="1"/>
+                            <field name="user_depo_ids" invisible="1"/>
+
+                    <group >
+                            <group colspan="2" string="Reason" attrs="{'invisible': ['|',('name','=','New'),('state','in',('paid','done'))]}">
+                                <field name="reason_reject_id" />
+                            </group>
+                            <group string="Claim Collection">
+                                <field name="is_nonclaim" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="operating_unit_id" options="{'no_create':True}" force_save="1" attrs="{'readonly': ['|','|',('kx_id','!=',False),('state','!=','draft'),('name','!=','New')]}"/>
+                                <field name="depo_id" options="{'no_create':True}" attrs="{'required': [('depo_id','!=',False)],'readonly': [('is_editable','=', False)]}"
+                                domain="[('parent_id', '=', operating_unit_id),('id', 'in', user_depo_ids)]" />
+                                <field name="claim_type_id" widget="selection" attrs="{'readonly': ['|',('state','!=','draft'),('name','!=','New')]}"/>
+                                <field name="claim_type" invisible="1"/>
+<!--                                <field name="claim_type_filter" invisible="1"/>-->
+
+<!--                                <field name="an_receipt" widget="radio" options="{'horizontal': true}" attrs="{'invisible': [('claim_type','!=','cncl')],'readonly': [('is_editable','=', False)]}"/>-->
+<!--                                <field name="kx_id"-->
+<!--                                       domain="['|',('empty','=', ref),('principal_code', '=', ref),'&amp;',-->
+<!--                                                    ('branch_code', '=', branch_code),-->
+<!--                                                    ('cc_id', '=', False)]"-->
+<!--                                       attrs="{'readonly': [('state','!=','draft')],'invisible': [('claim_type','!=','cncl')]}"-->
+<!--                                       options="{'no_create':True}"/>-->
+                                <field name="kx_id" invisible="1"/>
+
+                                <field name="claim_subtype" widget="radio" options="{'horizontal': true}" attrs="{'invisible': [('claim_type','!=','discount')],'readonly': ['|','|',('kx_id','!=',False),('state','!=','draft'),('name','!=','New')]}"/>
+                                    <field name="product_subtype" widget="radio" options="{'horizontal': true}" attrs="{'invisible': [('claim_type','!=','barang')],'readonly': [('is_editable','=', False)]}"/>
+
+                                <field name="claim_date" force_save="1"/>
+<!--                                attrs="{'readonly': [('state','!=','draft')]}"/>-->
+                                <field name="period" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="partner_id" force_save="1"
+                                       required="1" attrs="{'readonly': ['|','|',('kx_id','!=',False),('state','!=','draft'),('name','!=','New')]}"
+                                       options="{'no_create':True}" />
+
+
+<!--                                <field name="branch_code"  force_save="1"/>-->
+                                <field name="isclaim_in_budget" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="coding" force_save="1" attrs="{'readonly': [('claim_type','not in', ('other','noncl'))]}"/>
+                                <field name="remark" attrs="{'readonly': [('is_editable','=', False)]}" />
+                                <field name="notes" />
+                                <field name="lampiran" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="journal_id" invisible="1"/>
+                            </group>
+                            <group string="Documents Reference">
+                                <field name="customer_ref" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="branch_ref" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="opu_ref" attrs="{'invisible': [('claim_type','!=','manual')],'readonly': [('is_editable','=', False)]}"/>
+                                <field name="bkkk_ref" attrs="{'invisible': [('claim_type','not in',('manual','salary','cabang'))],'readonly': [('is_editable','=', False)]}"/>
+                                <field name="iom_ref" attrs="{'invisible': [('claim_type','!=','barang')],'readonly': [('is_editable','=', False)]}"/>
+                                <field name="iom_date" attrs="{'invisible': [('claim_type','!=','barang')],'readonly': [('is_editable','=', False)]}"/>
+                                <field name="refdoc" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="kc_id" options="{'no_create':True}" attrs="{'readonly': [('is_editable','=', False)]}"
+                                       domain="[('operating_unit_ids', 'in', operating_unit_id),('partner_id', '=', partner_id)]"/>
+                                <field name="vistex" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="claim_letter" attrs="{'required': [('ref','in',('FFI'))]}"/>
+
+                                <field name="cn_principal" />
+<!--                            <field name="claim_letter_date" attrs="{'readonly': [('is_editable','=', False)]}"/>-->
+                                <field name="service_inv" />
+                                <field name="tax_inv" />
+                                <field name="ar_claim_move_id"/>
+<!--                                <field name="invoice_id"/>-->
+
+                            </group>
+                            <group string="Payment References" >
+                                <field name="payment_term_id" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="tax_id" widget="many2many_tags" attrs="{'readonly': [('is_editable','=', False)]}"/>
+<!--                                <field name="pph1_id" attrs="{'readonly': [('is_editable','=', False)]}"/>-->
+<!--                                <field name="pph2_id" attrs="{'readonly': [('is_editable','=', False)]}"/>-->
+                                <field name="bank_id" attrs="{'readonly': [('is_editable','=', False)]}"
+                                       context="{'show_bankname': True}"
+                                       options="{'no_create':True}"/>
+                                <field name="bmbk_ids" widget="many2many_tags"/>
+                            </group>
+                            <group string="Send to HQ">
+                                <field name="pending_date"/>
+                                <field name="resi_number" attrs="{'invisible': [('name','like','AP-CLM')]}"/>
+                                <field name="expedition_name" attrs="{'invisible': [('name','like','AP-CLM')]}"/>
+                             </group>
+                            <group string="Datetime Histories">
+                                <field name="receive_date"
+                                       attrs="{'readonly': [('is_editable_pusat','=', False)]}"/>
+                                <field name="send_date" attrs="{'readonly': [('is_editable_pusat','=', False)]}"/>
+
+                                <field name="post_date"/>
+                                <field name="reject_date"/>
+<!--                                <field name="lpayment_date" string="Payment/BM/BM Date"/>-->
+
+                                <field name="paid_date"/>
+                            </group>
+                        <group string="Claim Aging"  >
+                                <field name="claim_age0"/>
+                                <field name="process_ap"/>
+                                <field name="claim_age"/>
+                                <field name="is_locked" readonly="1"/>
+                         </group>
+
+
+                         <group string="Key Person" colspan="2" >
+                                <field name="bm_name" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="contact_person" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="cp_tittle" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                                <field name="cp_telp" attrs="{'readonly': [('is_editable','=', False)]}"/>
+                         </group>
+
+
+                    </group>
+<!--                    <group string="Claim List" name="group_detail" attrs="{'invisible': [('claim_type','not in',('cncl','discount','barang','faktur','noncl'))]}">-->
+                   <notebook>
+                       <page string="Claim List">
+
+                            <group name="group_detail" attrs="{'invisible': [('is_from_bis','=',False)]}">
+                            <button name="claim_alloc"
+                                string="Recalculate Cl Paid Total"
+                                type="object"
+                                groups="base.group_no_one"/>
+<!--                            <button name="add_cl"-->
+<!--                                string="Add"-->
+<!--                                type="object"-->
+<!--                                class="oe_highlight"/>-->
+                            <button name="%(act_open_select_creditnote_view)d" type="action"
+                                class="oe_highlight oe_edit_only"   string="Select CLaims"
+                                attrs="{'invisible': ['|','|','|',('state', '!=', 'draft'),
+                                                                ('is_from_bis','=',False),
+                                                                ('is_usrdoc_match','=',False),
+                                                                ('is_claim_ready','=',False)]}"
+                                context="{'partner_id': ref,
+                                            'state': ['post','printed','cabang','pusat'],
+                                            'cn_type': [claim_type],
+                                            'claimcl_id':[False]
+                                          }"/>
+
+<!--                            <label for="my_detail"-->
+<!--                                   class="btn btn-sm btn-primary oe_edit_only"-->
+<!--                                   string="Select CLaims New"-->
+<!--                                   attrs="{'invisible': ['|',('state', '!=', 'draft'),('claim_type','not in',('cncl','discount'))]}"/>-->
+
+
+<!--                            <field name="my_detail" invisible="1"/>-->
+
+
+                            <field name="claimline_ids"
+                                   attrs="{'readonly': ['|',('is_branch','=', True),('name','=', 'New'),('is_editable','=', False)]}"
+                                   colspan="4" nolabel="1" widget="one2many_list" >
+<!--                                attrs="{'readonly': ['|',('is_branch','=', True),('is_editable','=', False)]}"-->
+                                <tree string="CN List" editable="bottom" create="0" delete="0">
+
+                                    <field name="cn_id" readonly="1" force_save="1"/>
+<!--                                           domain="[('state', 'in', ['post','open']),('principal_code', '=', parent.ref)]"-->
+<!--                                           options='{"no_open": False,"no_create": True}'/>-->
+<!--                                    attrs="{'readonly': [('exim_status','=', 'CC')]}"-->
+                                    <field name="description"/>
+                                    <field name="customer_code" readonly="1" force_save="1"/>
+                                    <field name="cn_total" sum="Total Claim"  readonly="1" force_save="1" />
+<!--                                    <field name="total_claimed_amount" attrs="{'column_invisible': [('parent.claim_type', '!=', 'discount')]}" readonly="1" />-->
+<!--                                     <field name="actual_claim_amount" attrs="{'column_invisible': [('parent.claim_type', '!=', 'discount')]}" force_save="1"/>-->
+                                    <field name="total_claimed_amount" attrs="{'column_invisible': [('parent.is_can_partial', '=', False)]}" readonly="1" />
+                                     <field name="actual_claim_amount" attrs="{'column_invisible': [('parent.is_can_partial', '=', False)],'readonly': [('parent.state','not in', ('draft'))]}" force_save="1"/>
+                                    <field name="paid_total" sum="Total Paid" readonly="1" force_save="1"/>
+<!--                                    <field name="bsp_share" attrs="{'readonly': [('exim_status','=', 'CC')]}"  force_save="1"/>-->
+<!--                                    <field name="principal_share" attrs="{'readonly': [('exim_status','=', 'CC')]}" force_save="1" />-->
+<!--                                    <field name="kc_no" readonly="1" force_save="1"/>-->
+<!--                                    <field name="principal_code"/>-->
+<!--                                    <field name="branch_code" readonly="1"/>-->
+                                    <field name="state" readonly="1" force_save="1"/>
+                                    <field name="exim_status" readonly="1" force_save="1" invisible="1"/>
+                                    <button name="unlink" class="fa fa-scissors"   type="object"
+                                        attrs="{'invisible': [('parent.state', 'not in', ('draft'))]}"/>
+                                </tree>
+                            </field>
+
+                    </group>
+                            <group string="Claim Manual" attrs="{'invisible': [('claim_type','!=','mix')]}">
+                                 <field name="add_amount" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible': [('claim_type','!=','mix')],'readonly': [('is_editable','=', False)]}"/>
+                                 <field name="add_remark" attrs="{'invisible': [('claim_type','!=','mix')],'readonly': [('is_editable','=', False)]}"/>
+                            </group>
+                       </page>
+                    </notebook>
+
+                    <group string="Claim Detail Amount" class="oe_subtotal_footer oe_right">
+<!--                        <field name="discount_amount" widget="monetary" options="{'currency_field': 'currency_id'}"-->
+<!--                               attrs="{'invisible': [('claim_type','not in',('discount'))],'readonly': [('is_editable','=', False)]}"/>-->
+<!--                        <field name="claim_amount" widget="monetary" options="{'currency_field': 'currency_id'}"-->
+<!--                               attrs="{'readonly': ['|',('is_editable','=', False),('claim_type','in',('cncl','discount','barang','faktur'))]}"/>-->
+                        <field name="claim_amount" widget="monetary" options="{'currency_field': 'currency_id'}"
+                               attrs="{'readonly': ['|', ('is_editable','=', False),('claimline_ids','!=',[])]}"/>
+                        <field name="tax_amount" widget="monetary" options="{'currency_field': 'currency_id'}" />
+                        <field name="pph1_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+<!--                        <field name="pph2_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>-->
+                        <field name="net_amount"  class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="realization_amount" class="oe_subtotal_footer_separator" widget="monetary"
+                               options="{'currency_field': 'currency_id'}"
+                                attrs="{'readonly': ['|','|',('state', '!=', 'paid'),('is_editable','=', False),('is_branch','=', True)]}"/>
+                        <field name="balance_amount" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="unrealized_amount" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                         <field name="reason_correction_id"   readonly="1" />
+<!--                               attrs="{'invisible': ['|','|',('state','not in',('paid','done')),('realization_amount','=',0),('balance_amount','=',0)]}"/>-->
+                        <field name="correction_amount" class="oe_subtotal_footer_separator" widget="monetary" readonly="1" />
+<!--                               attrs="{'readonly': [('is_branch','=', True)],-->
+<!--                               'invisible': ['|','|',('state','not in',('paid','done')),('realization_amount','=',0),('balance_amount','=',0)]}"/>-->
+
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_claim_cl_pivot" model="ir.ui.view">
+            <field name="name">bsp.claim.cl.pivot</field>
+            <field name="model">bsp.claim.cl</field>
+            <field name="arch" type="xml">
+                <pivot string="Claim BSP">
+                    <field name="operating_unit_id" type="row"/>
+                    <field name="claim_date" type="col"/>
+                    <field name="claim_amount" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+    <record id="view_claim_cl_graph_date" model="ir.ui.view">
+            <field name="name">bsp.claim.cl.graph</field>
+            <field name="model">bsp.claim.cl</field>
+            <field name="arch" type="xml">
+                <graph string="Claim BSP Statistics" type="bar">
+                    <field name="claim_date"/>
+                    <field name="claim_amount" operator="+" type='measure'/>
+                </graph>
+            </field>
+        </record>
+
+    <record id="view_bsp_claim_cl_tree" model="ir.ui.view">
+        <field name="name">bsp.claim.cl.tree</field>
+        <field name="model">bsp.claim.cl</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'" string="Claim List" delete="0">
+<!--                <field name="operating_unit_id"/>-->
+<!--                <field name="period"/>-->
+
+
+                <field name="operating_unit_id"/>
+                <field name="depo_id"/>
+                <field name="ref" />
+                <field name="is_nonclaim"/>
+                  <field name="is_locked"/>
+<!--                <field name="claim_type"/>-->
+                <field name="claim_type_id"/>
+                <field name="product_subtype"/>
+                <field name="state"/>
+                <field name="name"/>
+                <field name="claim_date"/>
+                 <field name="remark"/>
+                <field name="refdoc"/>
+                <field name="customer_ref"/>
+                <field name="vistex"/>
+                <field name="branch_ref"/>
+                <field name="process_ap"/>
+                <field name="isclaim_in_budget"/>
+                <field name="coding"/>
+                <field name="bkkk_ref"/>
+                <field name="claim_letter"/>
+
+                <field name="service_inv"/>
+                <field name="tax_inv"/>
+                <field name="payment_term_id"/>
+                <field name="claim_amount" sum="Total Claim"/>
+                <field name="tax_amount" sum="Total PPN"/>
+                <field name="pph1_amount" sum="Total PPH an BSP"/>
+<!--                <field name="discount_amount" sum="Total System Discount"/>-->
+                <field name="net_amount" sum="Total Net Claim"/>
+                <field name="realization_amount" sum="Total Realization"/>
+                <field name="balance_amount" sum="Total Claim Balance"/>
+<!--                <field name="correction_amount" sum="Total Correction"/>-->
+
+                <field name="send_date"/>
+<!--                <field name="claim_age0"/>-->
+<!--                <field name="claim_age"/>-->
+<!--                <field name="day90" sum="Total > 90 hari"/>-->
+<!--                <field name="day61_90"  sum="Total 61-90 hari"/>-->
+<!--                <field name="day31_60"  sum="Total 31-60 hari"/>-->
+<!--                <field name="day0_30"   sum="Total 0-30 hari"/>-->
+                <field name="invoice_ids" widget="many2many_tags"/>
+                <field name="payment_ids" widget="many2many_tags"/>
+                <field name="bmbk_ids" widget="many2many_tags"/>
+<!--                <field name="invoice_id" />-->
+<!--                <field name="lpayments" />-->
+                <field name="lpayment_date" invisible="1"/>
+<!--                <field name="lcn_number" />-->
+
+                <field name="lpayment_bankno" />
+
+
+            </tree>
+        </field>
+    </record>
+
+     <record id="action_variant_generate_principal_refund" model="ir.actions.server">
+        <field name="name">Ready to Paid</field>
+        <field name="type">ir.actions.server</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="bsp_claim.model_bsp_claim_cl"/>
+        <field name="binding_model_id" ref="bsp_claim.model_bsp_claim_cl"/>
+        <field name="code">
+                action = records.env['account.invoice']._create_from_claim_multiselect(records)
+        </field>
+    </record>
+
+    <template id="assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/bsp_claim/static/src/css/column_width.css"/>
+        </xpath>
+    </template>
+
+</odoo>

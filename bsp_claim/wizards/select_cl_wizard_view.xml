@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_select_creditnote_form" model="ir.ui.view">
+        <field name="name">select.creditnote.form</field>
+        <field name="model">select.creditnote</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="List CLaims">
+                <group string="Add Selected Claim">
+                    <!--                           domain="[('principal_code', '=', context.get('partner_id')),-->
+<!--                           ('state', 'in', context.get('state')),-->
+<!--                           ('cn_type', 'in', context.get('cn_type')),-->
+<!--                           ('is_select', '=', True)]"-->
+                    <field name="cn_ids" nolabel="1" options="{'no_create': True}"
+                           context="{'tree_view_ref': 'bsp_claim.view_bsp_creditnote_tree_wizard', 'search_view_ref': 'bsp_claim.view_bsp_creditnote_search_wizard'}">
+                             <tree string="Claim List">
+                                    <field name="name" />
+                                    <field name="customer_code" />
+                                    <field name="cn_total" />
+                                    <field name="total_claimed_amount" />
+                                    <field name="paid_total"/>
+                                    <field name="kc_no" />
+                                    <field name="state" />
+                                    <field name="exim_status"/>
+                                </tree>
+
+                    </field>
+
+                </group>
+                <footer>
+                    <button name="select_creditnote" string="Add" type="object" class="oe_highlight" />
+                    <button string="Cancel" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="act_open_select_creditnote_view">
+        <field name="name">Select Claims</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">select.creditnote</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="act_open_select_creditnote_view_form">
+        <field name="act_window_id" ref="act_open_select_creditnote_view" />
+        <field name="sequence" eval="10" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_select_creditnote_form" />
+    </record>
+
+</odoo>

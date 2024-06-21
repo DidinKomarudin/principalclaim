@@ -1,0 +1,35 @@
+<odoo>
+    <data>
+        
+        <record id="base_confirmation_wizard_form_view" model="ir.ui.view">
+            <field name="name">base.confirmation.wizard.form</field>
+            <field name="model">base.confirmation.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Base Confirmation Wizard">
+                    
+                    <group>
+                        <field name="name" readonly="1" nolabel="1" force_save="1"/>
+                        <field name="action" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_confirm" type="object" string="Yes" class="oe_highlight"/> or 
+                        <button string="No" class="oe_link" special="cancel"/>
+                    </footer>
+                    
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_base_confirmation_wizard" model="ir.actions.act_window">
+            <field name="name">Warning</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">base.confirmation.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base_confirmation_wizard_form_view"/>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+</odoo>

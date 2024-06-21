@@ -1,0 +1,41 @@
+<odoo>
+	<data>
+
+	    <record id="view_bsp_claim_magic_button" model="ir.ui.view">
+			<field name="name">Synchronization AP/HOCCD</field>
+			<field name="model">bsp.claim.magic.button</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+
+		        <form string="Magic Button">
+		        	<group>
+		        		<field name="action"/>
+		        	</group>
+<!--		        	<group>-->
+
+<!--						<field name="start_date" />-->
+<!--						<field name="end_date" />-->
+<!--						</group>-->
+					<footer>
+	                    <button name="action_magic" type="object" string="Do Your Action" class="oe_highlight"/> or
+	                    <button string="Cancel" class="oe_link" special="cancel"/>
+	                </footer>
+
+		        </form>
+	    	</field>
+	    </record>
+
+	    <record id="action_bsp_claim_magic_button" model="ir.actions.act_window">
+			<field name="name">Claim Synchronization</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">bsp.claim.magic.button</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="view_bsp_claim_magic_button"/>
+			<field name="target">new</field>
+	    </record>
+
+		<menuitem id="menu_bsp_claim_magic_button" parent="bsp_claim.menu_payment_config" action="action_bsp_claim_magic_button" sequence="20"/>
+
+	</data>
+</odoo>

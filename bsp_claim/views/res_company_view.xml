@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="res_company_form" model="ir.ui.view">
+        <field name="name">res.company.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page name="coa_setting" string="Chart f Account">
+                    <group name="Account_settings">
+                         <field name="bank_account_id"/>
+                        <field name="claim_prepaid_account_id"/>
+                        <field name="ump_account_id"/>
+                        <field name="ar_account_id"/>
+                        <field name="ar_claim_account_id"/>
+                        <field name="operation_exp_account_id"/>
+                        <field name="ppn_account_id"/>
+                        <field name="claim_income_account_id"/>
+                        <field name="sub_claim_account_id"/>
+                        <field name="add_claim_account_id"/>
+                        <field name="inv_claim_account_id"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

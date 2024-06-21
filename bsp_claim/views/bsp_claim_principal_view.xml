@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="bsp_claim_principal_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.claim.search.form</field>
+        <field name="model">bsp.claim.principal</field>
+        <field name="arch" type="xml">
+            <search string="Claim to Principal">
+                <field name="branch_code"/>
+                <field name="name"/>
+                <field name="claim_date"/>
+                <field name="state"/>
+                <field name="principal_code"/>
+                <field name="isclaim_in_budget"/>
+                <field name="remark"/>
+                <field name="customer_ref"/>
+                <field name="claim_letter"/>
+                <field name="claim_amount"/>
+                <field name="realization_amount"/>
+                <field name="claim_age"/>
+                <field name="cc_id"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_claim_principal_form" model="ir.ui.view">
+        <field name="name">bsp.claim.principal.form</field>
+        <field name="model">bsp.claim.principal</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                        <button name="button_draft" states="pending"
+                                string="Reset"
+                                type="object"
+                                groups="bsp_claim.group_claim_manager"/>
+                        <button name="button_pending" states="current"
+                                string="Pending" type="object"
+                                class="oe_highlight"/>
+                        <button name="button_post" states="pending"
+                                string="Approve"
+                                type="object"
+                                class="oe_highlight"
+                                groups="bsp_claim.group_claim_manager"/>
+<!--                        <button name="button_paid" states="post"-->
+<!--                                string="Paid"-->
+<!--                                type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                groups="bsp_claim.group_claim_manager"/>-->
+                        <button name="button_cancel" states="current,pending"
+                                string="Cancel"
+                                type="object"
+                                groups="bsp_claim.group_claim_manager"/>
+
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="current,pending,post,paid,cancel"
+                               statusbar_colors='{"post":"blue", "cancel":"red"}'/>
+
+                </header>
+
+
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object"  name="action_invoice_in_refund"
+                            class="oe_stat_button"
+                            icon="fa-pencil-square-o" attrs="{'invisible':['|', ('invoice_count', '=', 0), ('state', 'in', ('current','pending','cancel'))]}">
+                            <field name="invoice_count" widget="statinfo" string="Vendor Refund"/>
+                            <field name='invoice_ids' invisible="1"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="branch_code"/>
+                            <field name="name"/>
+                            <field name="claim_date"/>
+                            <field name="principal_code"/>
+                            <field name="isclaim_in_budget"/>
+                            <field name="remark"/>
+
+                        </group>
+                        <group>
+                            <field name="customer_ref"/>
+                            <field name="claim_letter"/>
+                            <field name="claim_amount"/>
+                            <field name="realization_amount"/>
+                            <field name="payment_term_id"/>
+                            <field name="tax_id"/>
+                             <field name="cc_id" readonly="1" />
+                            <field name="exim_status"/>
+                        </group>
+                        <group>
+                            <field name="pending_date"/>
+                            <field name="post_date"/>
+                            <field name="paid_date"/>
+                            <field name="claim_age"/>
+                        </group>
+                    </group>
+                    <group string="Claimed CLs" name="group_detail">
+                            <field name="cn_ids" nolabel="1" widget="one2many_list">
+                                <tree string="CL List" >
+                                    <field name="name"/>
+                                    <field name="customer_code"/>
+                                    <field name="cn_total" sum="Total CN"/>
+                                    <field name="bsp_share" sum="Total Share BSP"/>
+                                    <field name="principal_share" sum="Total Share Principal"/>
+                                    <field name="kc_no"/>
+                                    <field name="principal_code"/>
+                                    <field name="branch_code"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsp_claim_principal_tree" model="ir.ui.view">
+        <field name="name">bsp.claim.principal.tree</field>
+        <field name="model">bsp.claim.principal</field>
+        <field name="arch" type="xml">
+            <tree string="Claim List">
+                <field name="branch_code"/>
+                <field name="name"/>
+                <field name="claim_date"/>
+<!--                <field name="claim_age"/>-->
+                <field name="principal_code"/>
+                <field name="isclaim_in_budget"/>
+                <field name="customer_ref"/>
+                <field name="claim_letter"/>
+                <field name="program"/>
+                <field name="claim_amount"/>
+                <field name="realization_amount"/>
+                <field name="cc_id"/>
+                <field name="state"/>
+                <field name="exim_status"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+</odoo>

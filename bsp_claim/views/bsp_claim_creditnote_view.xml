@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="bsp_creditnote_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.creditnote.search.form</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <search string="Claim List">
+                <field name="name"/>
+                <field name="cn_type"/>
+                <field name="cn_date"/>
+                <field name="customer_code"/>
+                <field name="customer_name"/>
+                <field name="kc_no"/>
+                <field name="claim_id" readonly="1"/>
+                <field name="claimcl_id"/>
+                <field name="partner_id"/>
+                <field name="principal_code"/>
+                <field name="division_code"/>
+<!--                <field name="period"/>-->
+                <field name="branch_code"/>
+                <field name="operating_unit_id"/>
+                <field name="state"/>
+                <field name="exim_status"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="bsp_creditnote_discount_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.creditnote.discount.search.form</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <search string="Claim List">
+<!--                <field name="period"/>-->
+                <field name="operating_unit_id"/>
+                <field name="branch_code"/>
+                <field name="principal_code"/>
+                <field name="division_code"/>
+                 <field name="kc_no"/>
+                <field name="name"/>
+                <field name="cn_type"/>
+                <field name="cn_date"/>
+                <field name="from_date"/>
+                <field name="end_date"/>
+                <field name="claimcl_id"/>
+                <field name="state"/>
+                 <field name="exim_status"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="bsp_creditnote_facture_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.creditnote.facture.search.form</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <search string="Principal Facture List">
+<!--                <field name="period"/>-->
+                <field name="operating_unit_id"/>
+                <field name="branch_code"/>
+                <field name="principal_code"/>
+                <field name="division_code"/>
+                <field name="customer_code"/>
+                <field name="customer_name"/>
+                <field name="name" string="Facture No."/>
+                <field name="cn_type"/>
+                <field name="cn_date" string="Facture Date"/>
+                <field name="end_date" string="Expire Date"/>
+                <field name="claimcl_id"/>
+                 <field name="kc_no"/>
+                <field name="state"/>
+                 <field name="exim_status"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="bsp_creditnote_noncl_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.creditnote.noncl.search.form</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <search string="Claim Non CL List">
+<!--                <field name="period"/>-->
+                <field name="operating_unit_id"/>
+                <field name="branch_code"/>
+                <field name="principal_code"/>
+                <field name="division_code"/>
+                <field name="customer_code"/>
+                <field name="customer_name"/>
+                <field name="name" string="Facture No."/>
+                <field name="cn_type"/>
+                <field name="cn_date" string="Facture Date"/>
+                <field name="kc_no" string ="Offset No"/>
+                 <field name="from_date" string="Offset Date" />
+                 <field name="end_date" string="Expire Date" />
+                <field name="claimcl_id"/>
+                <field name="state"/>
+                 <field name="exim_status"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_form" model="ir.ui.view">
+        <field name="name">bsp.creditnote.form</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <form delete="0" create="0">
+                <header>
+                        <button name="button_draft" states="pending"
+                                string="Reset"
+                                type="object"
+                                groups="bsp_claim.group_claim_manager"/>
+                        <button name="button_pending" states="draft"
+                                string="Pending" type="object"
+                                class="oe_highlight"/>
+                        <button name="button_post" states="pending"
+                                string="Approve"
+                                type="object"
+                                class="oe_highlight"
+                                groups="bsp_claim.group_claim_manager"/>
+<!--                        <button name="button_paid" states="post"-->
+<!--                                string="paid"-->
+<!--                                type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                groups="bsp_claim.group_claim_manager"/>-->
+
+<!--                        <button name="button_done" states="paid"-->
+<!--                                string="done"-->
+<!--                                type="object"-->
+<!--                                class="oe_highlight"-->
+<!--                                groups="bsp_claim.group_claim_manager"/>-->
+                        <button name="button_cancel"
+                                string="Cancel"
+                                type="object"
+                                attrs="{'invisible': [('is_cancel_invisible','=',True)]}"/>
+
+                        <button name="button_printed"
+                                string="Reset to Printed"
+                                type="object"
+                                groups="bsp_claim.group_claim_spv"/>
+<!--                                attrs="{'invisible': [('state','in',('canceled')]}"/>-->
+
+
+
+
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,pending,post,printed,paid,done,cabang,pusat,canceled,rejected"
+                               statusbar_colors='{"post":"blue", "cancel":"red"}'/>
+
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Claim No"/>
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="is_cancel_invisible" invisible="1"/>
+                            <field name="cn_type"/>
+                            <field name="period"/>
+                            <field name="operating_unit_id" options="{'no_create':True}"/>
+                            <field name="branch_code" readonly="1"/>
+                            <field name="cn_date"/>
+                            <field name="cn_total"/>
+                            <field name="total_claimed_amount"/>
+                            <field name="paid_total"/>
+                            <field name="remain_total"/>
+                            <field name="ump_amount"  attrs="{'invisible': [('cn_type','not in',('cncl'))]}"/>
+                            <field name="bsp_share" attrs="{'invisible': [('cn_type','not in',('cncl'))]}"/>
+                            <field name="principal_share" attrs="{'invisible': [('cn_type','not in',('cncl'))]}"/>
+                            <field name="allocated_amount" attrs="{'invisible': [('cn_type','not in',('cncl'))]}"/>
+                            <field name="from_date" attrs="{'invisible': [('cn_type','not in',('discount'))]}"/>
+                            <field name="end_date" attrs="{'invisible': [('cn_type','not in',('discount'))]}"/>
+                        </group>
+                        <group>
+
+                            <field name="customer_code" attrs="{'invisible': [('cn_type','not in',('cncl'))]}"/>
+                            <field name="customer_name" attrs="{'invisible': [('cn_type','not in',('cncl'))]}"/>
+                            <field name="partner_id"  required="1"/>
+                            <field name="principal_code" readonly="1"/>
+                            <field name="division_code"/>
+                            <field name="kc_no" attrs="{'invisible': [('cn_type','not in',('cncl'))]}"/>
+                            <field name="remark"/>
+                            <field name="claim_id" attrs="{'invisible': [('cn_type','not in',('cncl'))]}"/>
+                            <field name="claimcl_id"/>
+<!--                           <field name="claimcl_ids" widget="one2many_tags"/>-->
+                            <field name="notes"/>
+                            <field name="company_id"/>
+                            <field name="journal_id"/>
+                            <field name="create_move_id"/>
+                            <field name="alloc_move_id"/>
+                             <field name="exim_status"/>
+                        </group>
+
+                    </group>
+                    <group>
+                        <button name="button_journal_all"
+                                attrs="{'invisible': [('cn_type','not in',('cncl'))]}"
+                                string="Create Journal ALL"
+                                type="object"
+                                groups="base.group_no_one"/>
+                        <button name="button_journals"
+                                attrs="{'invisible': [('cn_type','not in',('cncl'))]}"
+                                string="Create Journal"
+                                type="object"
+                                groups="base.group_no_one"/>
+                         <button name="button_revice"
+                                string="Edit ON"
+                                type="object"
+                                groups="base.group_no_one"/>
+                        <button name="button_backrevice"
+                                string="Edit Save"
+                                type="object"
+                                groups="base.group_no_one"/>
+                    </group>
+                    <group string="Claim Allocation" name="group_detail" attrs="{'invisible': [('cn_type','not in',('cncl'))]}">
+                            <field name="alloc_ids" nolabel="1" readonly="1">
+                                <tree string="Claim Alloaction"
+                                    editable="top">
+                                    <field name="name"/>
+                                    <field name="allocation_type"/>
+                                    <field name="allocation_date"/>
+                                    <field name="offset_type"/>
+                                    <field name="reference_no"/>
+                                    <field name="reference_date"/>
+                                    <field name="allocation_amount"/>
+                                    <field name="cn_id"/>
+                                </tree>
+                            </field>
+                    </group>
+                    <group string="KL Product Items" name="group_detail" attrs="{'invisible': [('cn_type','not in',('barang'))]}">
+                            <field name="kl_ids" nolabel="1" readonly="1">
+                                <tree string="Claim Product Items"
+                                    editable="top">
+                                     <field name="name"/>
+                                     <field name="cn_id"/>
+                                     <field name="product_name"/>
+                                     <field name="product_unit"/>
+                                     <field name="quantity"/>
+                                     <field name="hna"/>
+                                     <field name="total"/>
+                                     <field name="reference_no"/>
+                                     <field name="reference_date"/>
+                                </tree>
+                            </field>
+                    </group>
+                    <group string="Claims Collection" name="group_detail_claim" attrs="{'invisible': [('cn_type','not in',('cncl','discount','barang','faktur'))]}">
+                            <field name="claimcl_ids" nolabel="1" readonly="1">
+                                <tree string="Claims Collection"
+                                    editable="top">
+                                    <field name="claimcl_id"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                    </group>
+
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_claim_creditnote_pivot" model="ir.ui.view">
+            <field name="name">bsp.claim.creditnote.pivot</field>
+            <field name="model">bsp.creditnote.other</field>
+            <field name="arch" type="xml">
+                <pivot string="Claim Creditnote BSP">
+                    <field name="operating_unit_id" type="row"/>
+                     <field name="partner_id" type="row"/>
+                    <field name="cn_date" type="col"/>
+                    <field name="cn_total" type="measure"/>
+                    <field name="total_claimed_amount" type="measure"/>
+                    <field name="paid_total" type="measure"/>
+                     <field name="remain_total" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+    <record id="view_claim_creditnote_graph_date" model="ir.ui.view">
+            <field name="name">bsp.claim.creditnote.graph</field>
+            <field name="model">bsp.creditnote.other</field>
+            <field name="arch" type="xml">
+                <graph string="Claim Creditnote Statistics" type="bar">
+                    <field name="cn_date"/>
+                    <field name="cn_total" operator="+" type='measure'/>
+                </graph>
+            </field>
+        </record>
+
+     <record id="view_bsp_creditnote_all_tree" model="ir.ui.view">
+        <field name="name">bsp.creditnote.tree</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'canceled'"  string="Claim List" delete="0" create="0">
+<!--                <field name="period"/>-->
+<!--                <field name="operating_unit_id"/>-->
+                <field name="branch_code"/>
+<!--                <field name="partner_id"/>-->
+                <field name="cn_type"/>
+                <field name="principal_code"/>
+                <field name="division_code"/>
+                <field name="name"/>
+                <field name="cn_date"/>
+                <field name="customer_code"/>
+                <field name="customer_name"/>
+                <field name="cn_total" sum="Total CN"/>
+                <field name="total_claimed_amount" sum="Total CN Claimed" />
+                <field name="allocated_amount" sum="Total Allocated"/>
+                <field name="alloc_dates"/>
+                 <field name="ump_amount" sum="Total UMP"/>
+
+                <field name="end_date" string="Expire Date"/>
+                <field name="kc_no"/>
+<!--                <field name="claimcl_id"/>-->
+                <field name="claimcl_ids" widget="many2many_tags"/>
+
+                <field name="paid_total" sum="Total Paid"/>
+                <field name="remain_total" sum="Total Remain"/>
+<!--                <field name="create_move_id"/>-->
+<!--                <field name="alloc_move_id"/>-->
+                <field name="state"/>
+<!--                 <field name="exim_status"/>-->
+                <field name="notes"/>
+                <field name="kc_no" string ="Offset No"/>
+                <field name="from_date" string ="Offset No"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="view_bsp_creditnote_tree" model="ir.ui.view">
+        <field name="name">bsp.creditnote.tree</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'canceled'"  string="Claim List" delete="0" create="0">
+<!--                <field name="period"/>-->
+<!--                <field name="operating_unit_id"/>-->
+                <field name="branch_code"/>
+<!--                <field name="partner_id"/>-->
+                <field name="principal_code"/>
+                <field name="division_code"/>
+                <field name="name"/>
+                <field name="cn_date"/>
+                <field name="customer_code"/>
+                <field name="customer_name"/>
+                <field name="cn_total" sum="Total CN"/>
+                <field name="total_claimed_amount" sum="Total CN Claimed" />
+                <field name="allocated_amount" sum="Total Allocated"/>
+                <field name="alloc_dates"/>
+                 <field name="ump_amount" sum="Total UMP"/>
+
+                <field name="kc_no"/>
+<!--                <field name="claimcl_id"/>-->
+                <field name="claimcl_ids" widget="many2many_tags"/>
+
+                <field name="paid_total" sum="Total Paid"/>
+                <field name="remain_total" sum="Total Remain"/>
+<!--                <field name="create_move_id"/>-->
+<!--                <field name="alloc_move_id"/>-->
+                <field name="notes"/>
+                <field name="state"/>
+<!--                 <field name="exim_status"/>-->
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_discount_tree" model="ir.ui.view">
+        <field name="name">bsp.creditnote.discount.tree</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'canceled'"  string="Claim List" delete="0" create="0">
+<!--                <field name="period"/>-->
+                <field name="branch_code"/>
+                <field name="principal_code"/>
+                <field name="division_code"/>
+                <field name="name"/>
+                <field name="cn_type"/>
+                <field name="cn_date"/>
+                <field name="cn_total" sum="Total Claim"/>
+                <field name="total_claimed_amount" sum="Total CN Claimed"/>
+                <field name="from_date"/>
+                <field name="end_date"/>
+<!--                <field name="claimcl_id"/>-->
+                <field name="claimcl_ids" widget="many2many_tags"/>
+                <field name="paid_total" sum="Total Paid"/>
+                <field name="remain_total" sum="Total Remain"/>
+                <field name="notes"/>
+                <field name="state"/>
+
+<!--                 <field name="exim_status"/>-->
+<!--                <field name="is_select"/>-->
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_facture_tree" model="ir.ui.view">
+        <field name="name">bsp.creditnote.facture.tree</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'canceled'"  string="Claim List" delete="0" create="0">
+<!--                <field name="period"/>-->
+                <field name="branch_code"/>
+                <field name="principal_code"/>
+                <field name="division_code"/>
+<!--                <field name="cn_type"/>-->
+                <field name="name" string="Facture No."/>
+                <field name="cn_date" string="Facture Date."/>
+                <field name="customer_code"/>
+                <field name="customer_name"/>
+                <field name="cn_total" string="Facture Amount" sum="Total Facture"/>
+                <field name="total_claimed_amount" string="Total Faktur Claimed" sum="Total Claim"/>
+
+                <field name="end_date" string="Expire Date" />
+<!--                <field name="claimcl_id"/>-->
+                <field name="claimcl_ids" widget="many2many_tags"/>
+                <field name="paid_total" sum="Total Paid"/>
+                <field name="remain_total"/>
+                <field name="notes"/>
+                <field name="state"/>
+<!--                 <field name="exim_status"/>-->
+<!--                <field name="is_select"/>-->
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_noncl_tree" model="ir.ui.view">
+        <field name="name">bsp.creditnote.noncl.tree</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'canceled'"  string="Claim List" delete="0" create="0">
+                <field name="period"/>
+                <field name="branch_code"/>
+                <field name="principal_code"/>
+                <field name="division_code"/>
+                <field name="cn_type"/>
+                <field name="name" string="Facture No."/>
+                <field name="cn_date" string="Facture Date."/>
+                <field name="customer_code"/>
+                <field name="customer_name"/>
+                <field name="allocated_amount" sum="Facture Amount"/>
+                <field name="alloc_dates"/>
+                <field name="cn_total" string="Offset Amount" sum="Total Offset Amount"/>
+                <field name="total_claimed_amount" sum="Total Offset Claimed" />
+                <field name="kc_no" string ="Offset No"/>
+                <field name="from_date" string="Offset Date" />
+
+<!--                 <field name="end_date" string="Expire Date" />-->
+<!--                <field name="claimcl_id"/>-->
+                <field name="claimcl_ids" widget="many2many_tags"/>
+                <field name="paid_total" sum="Total Paid"/>
+                <field name="remain_total"/>
+                <field name="notes"/>
+                <field name="state"/>
+<!--                 <field name="exim_status"/>-->
+<!--                <field name="is_select"/>-->
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_tree_wizard" model="ir.ui.view">
+        <field name="name">bsp.creditnote.tree.wizard</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="state == 'canceled'"  string="Claim List"  >
+<!--                <field name="period"/>-->
+                <field name="branch_code" string ='Branch'/>
+                <field name="principal_code" string ='Principal'/>
+                <field name="kc_no"  string="         KC         "/>
+                <field name="name"   string="         CN         "/>
+                <field name="cn_type" string="Type"/>
+                <field name="cn_date" string ="Date"/>
+                <field name="customer_code" string="Customer"/>
+<!--                <field name="customer_name"/>-->
+                <field name="cn_total" />
+                <field name="total_claimed_amount"/>
+                <field name="paid_total"/>
+                <field name="remain_total"/>
+                <field name="notes"/>
+                <field name="state"/>
+                <field name="is_select"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bsp_creditnote_search_wizard" model="ir.ui.view">
+        <field name="name">bsp.creditnote.search.wizard</field>
+        <field name="model">bsp.creditnote.other</field>
+        <field name="arch" type="xml">
+            <search string="Claim List">
+<!--                <field name="period"/>-->
+                <field name="branch_code"/>
+                <field name="principal_code"/>
+                <field name="kc_no"/>
+                <field name="name"/>
+                <field name="cn_type"/>
+                <field name="cn_date"/>
+                <field name="customer_code"/>
+<!--                <field name="customer_name"/>-->
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+
+<!--    <record id="cl_tree_view4claim" model="ir.ui.view">-->
+<!--        <field name="model">bsp.creditnote.other</field>-->
+<!--        <field name="priority" eval="20"/>-->
+<!--        <field name="arch" type="xml">-->
+
+<!--            <tree string="Claim for Collection"  editable="top">-->
+<!--                <field name="selected_claim"/>-->
+<!--                <field name="name"/>-->
+<!--                <field name="period"/>-->
+<!--                <field name="operating_unit_id"/>-->
+<!--                <field name="branch_code"/>-->
+<!--                <field name="operating_unit_id"/>-->
+<!--                <field name="principal_code"/>-->
+<!--                <field name="division_code"/>-->
+<!--                <field name="cn_date"/>-->
+<!--                <field name="customer_code"/>-->
+<!--                <field name="customer_name"/>-->
+<!--                <field name="cn_total"/>-->
+<!--                <field name="paid_total"/>-->
+<!--                <field name="ump_amount"/>-->
+<!--                <field name="bsp_share"/>-->
+<!--                <field name="principal_share"/>-->
+<!--                <field name="kc_no"/>-->
+<!--                <button name="button_quick_open_cl" string="Open" type="object"/>-->
+<!--            </tree>-->
+<!--       </field>-->
+<!--    </record>-->
+
+</odoo>

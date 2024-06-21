@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payment_analysis_pivot" model="ir.ui.view">
+         <field name="name">payment.analysis.pivot</field>
+         <field name="model">payment.analysis</field>
+         <field name="arch" type="xml">
+            <pivot string="payment Analysis" disable_linking="True">
+                <field name="invoice_id" type="row"/>
+                <field name="date_invoice" type="col"/>
+
+                 <field name="bank_amount" type="measure"/>
+                <field name="cash_amount" type="measure"/>
+                <field name="offset_amount" type="measure"/>
+                <field name="bd_amount" type="measure"/>
+                <field name="balance_amount" type="measure"/>
+             </pivot>
+         </field>
+    </record>
+
+    <record id="payment_analysis_pivot_search" model="ir.ui.view">
+        <field name="name">payment.analysis.search</field>
+        <field name="model">payment.analysis</field>
+        <field name="arch" type="xml">
+            <search string="payment Analysis">
+                <field name="invoice_id"/>
+                <field name="move_id"/>
+<!--                <field name="payment_id"/>-->
+                <field name="payment_id"/>
+<!--                string="Branch" domain="[('payment_id.branch_code', '=', 'BLG')]"/>-->
+                <separator/>
+<!--                <filter name="Principal"/>-->
+<!--&lt;!&ndash;                string="Principal" domain="[('paymentcl_id.ref', '=', 'NFI')]"/>&ndash;&gt;-->
+<!--                <separator/>-->
+                <filter string="This Year" name="year" domain="[('date_invoice','&lt;=', time.strftime('%%Y-12-31')),('date_invoice','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <group expand="1" string="Group By">
+                    <filter string="Coll Invoice" name="Invoice" context="{'group_by':'invoice_id'}"/>
+<!--                    <filter string="payment" name="payment" context="{'group_by':'payment_id'}"/>-->
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

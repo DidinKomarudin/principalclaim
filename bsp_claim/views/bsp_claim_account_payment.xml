@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="account_payment_claim_principal" model="ir.ui.view">
+            <field name="name">account.payment.claim.principal.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <button name="cancel" position="attributes">
+                    <attribute name="states"/>
+                    <attribute name="attrs">
+                        {
+                        'invisible':[('state','!=','posted')]
+                        }
+                    </attribute>
+                </button>
+                <button name="action_draft" position="attributes">
+                    <attribute name="groups">base.group_no_one</attribute>
+                </button>
+                <button name="action_draft" position="after">
+                    <button name="action_done" class="oe_highlight"
+                            confirm="You are going to send the claim items this payment to related BM HOCCD?"
+                            attrs="{'invisible':['|','|',('pv_type','!=', 'bm'),('state','!=','posted'),('pv_id','=',False)]}"
+                            string="Send to HO" type="object"/>
+                    <button name="action_reset2posted" class="oe_highlight"
+                            confirm="You are going to POSTED state ?"
+                            states="done"
+                            groups="base.group_no_one"
+                            string="Reset Payment" type="object"/>
+                </button>
+                <field name="state" position="replace">
+                     <field name="state" widget="statusbar" statusbar_visible="draft,posted,done,cancelled"/>
+                </field>
+
+                <field name="payment_type" position="before">
+                    <field name="is_claim"/>
+                </field>
+                <field name="payment_date" position="after">
+                    <field name="approval_date"/>
+                </field>
+                <field name="journal_id" position="after">
+                    <field name="pv_type" invisible="1"/>
+                    <field name="ref" invisible="1"/>
+                    <field name="ref2" invisible="1"/>
+                    <field name="pv_id" force_save="1"  context="{'show_refcoa': True}" options='{"no_create": True, "no_edit": True}'
+                    domain="[('type','=',pv_type),('principal_code','in',(ref,ref2)),('state','not in',('close','cancel'))]"
+                    attrs="{'readonly': ['|',('state','in',('done','cancelled')),('pv_type','=','bk') ,'&amp;', ('pv_id','=',True)],
+                            'invisible':[('pv_type','not in',('bm','bk'))]}" />
+                    <field name="pv_amount" readonly="1" attrs="{'invisible':[('pv_type','not in',('bm','bk'))]}"/>
+                    <field name="ref_coa" readonly="1"
+                    attrs="{'invisible':[('pv_type','not in',('bm'))]}"/>
+                </field>
+
+                <field name="communication" position="before">
+                    <field name="bank_reference" attrs="{'readonly': [('state','!=','draft')]}"/>
+                    <field name="ref_payment_id" attrs="{'invisible': ['|',('is_claim','=',False),('payment_type','!=','outbound')]}"
+                    domain="[('partner_id','=',partner_id),('state','=','posted')]" />
+                </field>
+            </field>
+        </record>
+
+        <record id="account_payment_claim_principal_inv" model="ir.ui.view">
+            <field name="name">account.payment.claim.principal.inv.form</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_invoice_form"/>
+            <field name="arch" type="xml">
+                 <field name="amount" position="attributes">
+                    <attribute name="attrs">{'readonly':[('pv_type','in',('bm','bk'))]}</attribute>
+                </field>
+                <field name="payment_date" position="replace">
+                    <field name="payment_date" force_save="1" attrs="{'readonly':[('pv_type','in',('bm','bk'))]}"/>
+                </field>
+                <field name="journal_id" position="before">
+                    <field name="payment_type" invisible="1"/>
+                    <field name="is_claim"/>
+                    <field name="pv_type" invisible="1"/>
+                    <field name="ref" invisible="0"/>
+                     <field name="ref2" invisible="1"/>
+
+                </field>
+                <field name="payment_date" position="after">
+                    <field name="approval_date"/>
+                </field>
+                <field name="journal_id" position="after">
+                     <field name="pv_id" force_save="1" context="{'show_refcoa': True}" options='{"no_create": True, "no_edit": True}'
+                    domain="[('type','=',pv_type),('principal_code','in',(ref,ref2)),('state','not in',('close','cancel'))]"
+                    attrs="{'readonly': ['|',('state','in',('done','cancelled')),('pv_type','=','bk') ,'&amp;', ('pv_id','=',True)],
+                            'invisible':[('pv_type','not in',('bm','bk'))]}" />
+                    <field name="pv_amount" readonly="1"
+                    attrs="{'invisible':[('pv_type','not in',('bm','bk'))]}"/>
+                    <field name="ref_coa" readonly="1"
+                    attrs="{'invisible':[('pv_type','not in',('bm'))]}"/>
+                    <field name="bank_reference"/>
+                </field>
+
+
+
+<!--                    <field name="communication" position="after">-->
+<!--                    <field name="ref_payment_id" attrs="{'invisible': ['|',('is_claim','=',False),('payment_type','!=','outbound')]}"-->
+<!--                    domain="[('partner_id','=',partner_id),('state','=','post')]" />-->
+<!--                </field>-->
+
+            </field>
+        </record>
+        <record id="view_claim_account_supplier_payment_tree_inherit" model="ir.ui.view">
+            <field name="name">claim.account.payment.tree</field>
+            <field name="model">account.payment</field>
+            <field name="priority" eval="70"/>
+            <field name="inherit_id" ref="account.view_account_supplier_payment_tree"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="pv_id"/>
+                </field>
+                <field name="amount_residual" position="after">
+                    <field name="ref_coa" invisible="1"/>
+                    <field name="bank_reference"/>
+                </field>
+                <field name="payment_date" position="after">
+                    <field name="approval_date"/>
+                </field>
+            </field>
+        </record>
+
+    <record id="view_claim_account_payment_search" model="ir.ui.view">
+        <field name="name">claim.account.payment.search</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+            <field name="journal_id" position="after">
+                <field name="pv_id"/>
+                <field name="ref_coa"/>
+            </field>
+             <xpath expr="//filter[@name='state_posted']" position="after">
+                 <filter string="Done" domain="[('state','=','done')]" name="done_sent"/>
+            </xpath>
+        </field>
+    </record>
+
+
+
+<!--        <record id="account_payment_claim_principal_gts" model="ir.ui.view">-->
+<!--            <field name="name">account.payment.claim.principal.gts.form</field>-->
+<!--            <field name="model">account.payment</field>-->
+<!--            <field name="inherit_id" ref="gts_multiple_invoice_payment_currency.view_account_payment_form_inherit_gts"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <xpath expr="//notebook/page/button[@name='button_validate']" position="after">-->
+<!--                    <field name="result_trigger_field" invisible="1"/>-->
+<!--                    <button name="onchange_result_trigger_field" string="Validate no Save" class="oe_highlight" type="object" triggeronchange="result_trigger_field" />-->
+<!--                </xpath>-->
+<!--            </field>-->
+<!--        </record>-->
+</odoo>

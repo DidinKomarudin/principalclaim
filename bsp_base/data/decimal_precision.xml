@@ -1,0 +1,15 @@
+<odoo>
+	<data noupdate="0">
+
+		<record id="digit_ratio" model="decimal.precision">
+			<field name="name">Ratio</field>
+			<field name="digits">2</field>
+		</record>
+
+		<record id="digit_uom_convertion" model="decimal.precision">
+			<field name="name">UoM Convertion</field>
+			<field name="digits">16</field>
+		</record>
+		
+	</data>
+</odoo>

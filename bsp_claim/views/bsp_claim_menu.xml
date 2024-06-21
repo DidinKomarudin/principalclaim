@@ -1,0 +1,656 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <record model="ir.actions.act_window" id="action_bsp_creditnote_all_tree">
+            <field name="name">List of Claims From BIS</field>
+            <field name="res_model">bsp.creditnote.other</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="view_id" ref="view_bsp_creditnote_all_tree"/>
+            <field name="search_view_id" ref="bsp_creditnote_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your creditnotes.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_creditnote_tree">
+            <field name="name">List of Claims CL</field>
+            <field name="res_model">bsp.creditnote.other</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('cn_type', '=', 'cncl')]</field>
+            <field name="view_id" ref="view_bsp_creditnote_tree"/>
+            <field name="search_view_id" ref="bsp_creditnote_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your creditnotes.
+                </p>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_bsp_creditnote_discount_tree">
+            <field name="name">List of Claims Discount</field>
+            <field name="res_model">bsp.creditnote.other</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('cn_type', '=', 'discount')]</field>
+            <field name="view_id" ref="view_bsp_creditnote_discount_tree"/>
+            <field name="search_view_id" ref="bsp_creditnote_discount_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your creditnotes.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_creditnote_barang_tree">
+            <field name="name">List of Claims Barang</field>
+            <field name="res_model">bsp.creditnote.other</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('cn_type', '=', 'barang')]</field>
+            <field name="view_id" ref="view_bsp_creditnote_discount_tree"/>
+            <field name="search_view_id" ref="bsp_creditnote_discount_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your products.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_creditnote_facture_tree">
+            <field name="name">List of Claims Facture</field>
+            <field name="res_model">bsp.creditnote.other</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('cn_type', '=', 'faktur')]</field>
+            <field name="view_id" ref="view_bsp_creditnote_facture_tree"/>
+            <field name="search_view_id" ref="bsp_creditnote_facture_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your Principal Factures.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_creditnote_noncl_tree">
+            <field name="name">List of Claims Non CL</field>
+            <field name="res_model">bsp.creditnote.other</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain">[('cn_type', '=', 'noncl')]</field>
+            <field name="view_id" ref="view_bsp_creditnote_noncl_tree"/>
+            <field name="search_view_id" ref="bsp_creditnote_noncl_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your Principal Factures.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_creditnote_alloc_tree">
+            <field name="name">Claims Allocation (CALL)</field>
+            <field name="res_model">bsp.creditnote.alloc</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="bsp_creditnote_alloc_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your creditnotes allocation.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_claim_principal_tree">
+            <field name="name">Claim Collection (KX) to Principal</field>
+            <field name="res_model">bsp.claim.principal</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="bsp_claim_principal_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your Claims.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_claim_cl_tree">
+            <field name="name">Claim Collection (CC) to Principal</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="context">{'show_codename': True,'show_bankname': True,'show_refcoa': True}</field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your Claims Collection.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_bsp_claim_cl_tree_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_bsp_claim_cl_tree"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_kc_tree">
+            <field name="name">BSP Branch Correspondence (KC)</field>
+            <field name="res_model">bsp.kc</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="bsp_kc_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your KCs.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_pv_tree">
+            <field name="name">BSP Payment Voucher (PV)</field>
+            <field name="res_model">bsp.payment.voucher</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="bsp_pv_search_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your PVs.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_claim_lock_tree">
+            <field name="name">BSP Closing-Lock Claim</field>
+            <field name="res_model">bsp.claim.lock</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="bsp_claim_lock_search_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your locked claims.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_claim_type_tree">
+            <field name="name">Claim Type</field>
+            <field name="res_model">bsp.claim.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain"></field>
+            <field name="search_view_id" ref="bsp_claim_type_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your Claim Types.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_claim_monitoring_report"> <!-- Menu + python -->
+            <field name="name">Claim Monitoring Report</field>
+            <field name="res_model">bsp.claim.monitoring</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+             <field name="search_view_id" ref="claim_monitoring_report_search_view"/>
+            <field name="context">{'group_by': ['branch','principal','claim_id']}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">
+                    No claim monitoring found
+                </p><p>
+                    This analysis gives you a fast overview on the current claims monitoring.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_claim_cl_monitoring_report"> <!-- Menu + python -->
+            <field name="name">Claim Monitoring Report</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+             <field name="search_view_id" ref="claim_cl_monitoring_report_search_view"/>
+<!--            <field name="context">{'group_by': ['operating_unit_id','partner_id']}</field>-->
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">
+                    No claim monitoring found
+                </p><p>
+                    This analysis gives you a fast overview on the current claims monitoring.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_claim_cl_monitoring_report_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_claim_cl_monitoring_report_tree"/>
+            <field name="act_window_id" ref="action_claim_cl_monitoring_report"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_claim_type_monitoring_report"> <!-- Menu + python -->
+            <field name="name">Claim Monitoring By Type Report</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+             <field name="search_view_id" ref="claim_type_monitoring_report_search_view"/>
+<!--            <field name="context">{'group_by': ['operating_unit_id','partner_id']}</field>-->
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">
+                    No claim monitoring found
+                </p><p>
+                    This analysis gives you a fast overview on the current claims monitoring by type.
+                </p>
+            </field>
+        </record>
+        <record id="action_claim_type_monitoring_report_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_claim_type_monitoring_report_tree"/>
+            <field name="act_window_id" ref="action_claim_type_monitoring_report"/>
+        </record>
+
+
+
+        <record id="action_payment_monitoring_report" model="ir.actions.act_window">
+            <field name="name">Payment Monitoring Report</field>
+            <field name="res_model">payment.analysis</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{'group_by': ['invoice_id']}</field>
+            <field name="search_view_id" ref="bsp_claim.payment_monitoring_report_search_view"/>
+            <field name="view_id" ref="bsp_claim.view_payment_monitoring_report_tree"/>
+        </record>
+
+        <record id="action_claim_analysis_pivot" model="ir.actions.act_window">
+            <field name="name">Claim Analysis</field>
+            <field name="res_model">claim.analysis</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="search_view_id" ref="bsp_claim.claim_analysis_pivot_search"/>
+            <field name="view_id" ref="bsp_claim.claim_analysis_pivot"/>
+<!--            <field name="context">{'search_default_branch':1}</field>-->
+        </record>
+
+        <record id="action_payment_analysis_pivot" model="ir.actions.act_window">
+            <field name="name">Payment Analysis</field>
+            <field name="res_model">payment.analysis</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">pivot,graph</field>
+            <field name="search_view_id" ref="bsp_claim.payment_analysis_pivot_search"/>
+            <field name="view_id" ref="bsp_claim.payment_analysis_pivot"/>
+<!--            <field name="context">{'search_default_branch':1}</field>-->
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_purchase_recap_tree">
+            <field name="name">BSP Montly Purchase Recapitulation</field>
+            <field name="res_model">bsp.purchase.recap</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="search_view_id" ref="bsp_purchase_recap_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your purchase recapitulation.
+                </p>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_bsp_sales_recap_tree">
+            <field name="name">BSP Montly Sales Recapitulation</field>
+            <field name="res_model">bsp.sales.recap</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="search_view_id" ref="bsp_sales_recap_search_form_view"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your sales recapitulation.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_invoice_in_claim" model="ir.actions.act_window">
+            <field name="name">Claim Invoices</field>
+            <field name="res_model">account.invoice</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('type','=','in_refund')]</field>
+            <field name="context">{'default_type': 'in_refund', 'type': 'in_refund', 'journal_type': 'purchase'}</field>
+            <field name="search_view_id" ref="account.view_account_invoice_filter"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a vendor credit note
+              </p><p>
+                Note that the easiest way to create a vendor credit note it to do it directly from the vendor bill.
+              </p>
+            </field>
+        </record>
+
+         <record id="action_account_payments_claim" model="ir.actions.act_window">
+            <field name="name">Claim Payments</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="context">{'default_payment_type': 'inbound', 'default_partner_type': 'supplier','show_refcoa': True}</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="account.view_account_supplier_payment_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                  Register a payment
+                </p><p>
+                  Payments are used to register liquidity movements. You can process those payments by your own means or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_account_payments_invoice_line" model="ir.actions.act_window">
+            <field name="name">Account Invoice Lines</field>
+            <field name="res_model">account.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+<!--            <field name="context">{'default_payment_type': 'inbound', 'default_partner_type': 'supplier'}</field>-->
+            <field name="domain">[]</field>
+            <field name="view_id" ref="bsp_claim.view_claim_account_invoice_line_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                  account invoice lines register
+                </p><p>
+                  Account invoice line are used to allocate payment voucher principal. You can process those payments by your own means or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="action_claim_ar_monitoring_report"> <!-- Menu + python -->
+            <field name="name">Claim AR Monitoring Report</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+             <field name="search_view_id" ref="claim_ar_monitoring_report_search_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">
+                    No claim AR monitoring found
+                </p><p>
+                    This analysis gives you a fast overview on the current claims AR monitoring.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_claim_ar_monitoring_report_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_claim_ar_monitoring_report_tree"/>
+            <field name="act_window_id" ref="action_claim_ar_monitoring_report"/>
+        </record>
+
+<!--        Menu to Print Docx Report-->
+	    <act_window id="action_bsp_claim_print"
+				    key2="client_action_multi"
+				    name="Print Claim .DocX"
+				    res_model="wizard.bsp.claim.print"
+				    src_model="bsp.claim.cl"
+				    view_mode="form"
+				    target="new"/>
+
+
+        <menuitem
+            name="BSP Claims"
+            id="menu_bsp_claim_principal"
+            web_icon="bsp_claim,static/src/img/icon.png"
+            sequence="3"
+            groups="bsp_claim.group_claim_view_user"
+        />
+
+        <menuitem
+            name="Claim Principals"
+            id="menu_claim_monitoring"
+            parent="menu_bsp_claim_principal"
+            sequence="20"
+        />
+
+        <menuitem
+            name="Claim Payments"
+            id="menu_principal_payments"
+            web_icon="bsp_claim,static/src/img/icon.png"
+            sequence="4"
+            groups="bsp_claim.group_hoccd_user,bsp_claim.group_claim_user"
+        />
+
+        <menuitem
+            name="Claim Reports"
+            id="menu_claim_report"
+            parent="menu_bsp_claim_principal"
+            sequence="30"
+        />
+        <menuitem
+            name="Configuration"
+            id="menu_claim_config"
+            parent="menu_bsp_claim_principal"
+            sequence="40"
+            groups=""
+        />
+
+        <menuitem
+            name="Configuration"
+            id="menu_payment_config"
+            parent="menu_principal_payments"
+            sequence="40"
+            groups="bsp_claim.group_hoccd_user,bsp_claim.group_claim_user"
+        />
+
+        <menuitem
+            action="bsp_claim_type_action"
+            id="bsp_claim_type_menu"
+            parent="menu_bsp_claim_principal" sequence="0"
+            name="Overview"/>
+
+        <menuitem
+            name="List Claim non-Discount"
+            id="menu_creditnote_monitoring"
+            action="action_bsp_creditnote_tree"
+            parent="menu_claim_monitoring"
+            sequence="10"
+        />
+        <menuitem
+            name="List Claim From BIS"
+            id="menu_creditnote_monitoring_all"
+            action="action_bsp_creditnote_all_tree"
+            parent="menu_claim_monitoring"
+            sequence="8"
+        />
+
+         <menuitem
+            name="List Claim Discount"
+            id="menu_creditnote_discount_monitoring"
+            action="action_bsp_creditnote_discount_tree"
+            parent="menu_claim_monitoring"
+            sequence="20"
+        />
+
+         <menuitem
+            name="List Claim Product"
+            id="menu_creditnote_barang_monitoring"
+            action="action_bsp_creditnote_barang_tree"
+            parent="menu_claim_monitoring"
+            sequence="30"
+        />
+
+        <menuitem
+            name="List Claim Facture"
+            id="menu_creditnote_facture_monitoring"
+            action="action_bsp_creditnote_facture_tree"
+            parent="menu_claim_monitoring"
+            sequence="40"
+        />
+        <menuitem
+            name="List Claim Offset"
+            id="menu_creditnote_noncl_monitoring"
+            action="action_bsp_creditnote_noncl_tree"
+            parent="menu_claim_monitoring"
+            sequence="42"
+        />
+
+        <menuitem
+            name="CL Allocations"
+            id="menu_creditnote_alloc_monitoring"
+            action="action_bsp_creditnote_alloc_tree"
+            parent="menu_claim_monitoring"
+            groups="base.group_no_one"
+            sequence="50"
+        />
+        <menuitem
+            name="Claim Collection to Principal (KX)"
+            id="menu_claim_principal_monitoring"
+            action="action_bsp_claim_principal_tree"
+            parent="menu_claim_monitoring"
+            groups="base.group_no_one"
+            sequence="60"
+        />
+
+        <menuitem
+            name="Claim Collection"
+            id="menu_claim_cl_monitoring"
+            action="action_bsp_claim_cl_tree"
+            parent="menu_claim_monitoring"
+            sequence="70"
+        />
+
+
+        <menuitem
+            name="Invoices"
+            id="menu_claim_invoices"
+            action="action_invoice_in_claim"
+            parent="menu_principal_payments"
+            sequence="10"
+            groups="bsp_claim.group_hoccd_user,bsp_claim.group_claim_user"
+        />
+
+        <menuitem
+            name="Payments"
+            id="menu_claim_payments"
+            action="action_account_payments_claim"
+            parent="menu_principal_payments"
+            sequence="20"
+            groups="bsp_claim.group_hoccd_user,bsp_claim.group_claim_user"
+        />
+
+
+
+
+        <menuitem
+            name="Claim Collection Monitoring (KX)"
+            id="menu_claim_report_monitoring"
+            action="claim_principal_monitoring_wizard_action"
+            parent="menu_claim_report"
+            groups="base.group_no_one"
+            sequence="1"
+        />
+
+        <menuitem
+            name="Claim Collection Monitoring"
+            id="menu_claim_cl_report_monitoring"
+            action="claim_cl_monitoring_wizard_action"
+            parent="menu_claim_report"
+            sequence="2"
+        />
+
+         <menuitem
+            name="Payment Monitoring"
+            id="menu_payment_report_monitoring"
+            action="action_payment_monitoring_report"
+            parent="menu_claim_report"
+            sequence="2"
+        />
+
+        <menuitem
+            name="Master Branch Correspondence(KC)"
+            id="menu_kc_master"
+            action="action_bsp_kc_tree"
+            parent="menu_claim_config"
+            sequence="1"
+        />
+
+        <menuitem
+            name="List BSP Payment Voucher(PV)"
+            id="menu_pv_master"
+            action="action_bsp_pv_tree"
+            parent="menu_payment_config"
+            sequence="1"
+            groups="bsp_claim.group_hoccd_user,bsp_claim.group_claim_user"
+        />
+
+        <menuitem
+            name="List Claim Lock"
+            id="menu_claim_lock_master"
+            action="action_bsp_claim_lock_tree"
+            parent="menu_claim_config"
+            sequence="20"
+            groups="bsp_claim.group_claim_manager"
+        />
+
+
+        <menuitem
+            name="Master Claim Types"
+            id="menu_claim_type_master"
+            action="action_bsp_claim_type_tree"
+            parent="menu_claim_config"
+            sequence="2"
+        />
+
+        <menuitem
+            name="Monthly Purchase Recapitulation"
+            id="menu_purchase_recap_master"
+            action="action_bsp_purchase_recap_tree"
+            parent="menu_claim_config"
+            sequence="10"
+        />
+        <menuitem
+            name="Monthly Sales Recapitulation"
+            id="menu_sales_recap_master"
+            action="action_bsp_sales_recap_tree"
+            parent="menu_claim_config"
+            sequence="20"
+        />
+
+
+        <menuitem
+               name="Claim Analysis"
+               action="action_claim_analysis_pivot"
+               id="menu_action_claim_analysis_pivot"
+               parent="bsp_claim.menu_claim_report"
+               sequence="3"
+        />
+
+        <menuitem
+               name="Payment Analysis"
+               action="action_payment_analysis_pivot"
+               id="menu_action_payment_analysis_pivot"
+               parent="bsp_claim.menu_claim_report"
+               sequence="4"
+        />
+
+         <menuitem
+            name="Claim AR Monitoring"
+            id="menu_claim_ar_report_monitoring"
+            action="claim_ar_monitoring_wizard_action"
+            parent="menu_claim_report"
+            sequence="30"
+        />
+
+        <record model="ir.actions.act_window" id="action_claim_account_invoice_line">
+            <field name="name">Invoice Lines</field>
+            <field name="res_model">account.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="account.view_invoice_line_tree"/>
+<!--            <field name="search_view_id" ref="account.view_account_invoice_line_search"/>-->
+            <field name="domain">[]</field>
+        </record>
+
+
+
+    </data>
+</odoo>

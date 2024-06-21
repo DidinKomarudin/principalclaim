@@ -1,0 +1,258 @@
+<odoo>
+
+    <record id="action_budget_card_report_html" model="ir.actions.client">
+        <field name="name">AR Claim Card Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'budget.card.report'}"
+        />
+    </record>
+
+    <report string="Budget Card PDF"
+            id="action_budget_card_report_pdf"
+            model="budget.card.report"
+            name="bsp_claim_reports.budget_card_report_pdf"
+            file="bsp_claim_reports.budget_card_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'AR CLaim Card Report'"
+            paperformat="bsp_claim_reports.paperformat_budget_card"
+    />
+
+    <report string="AR Claim Card XLSX"
+            id="action_budget_card_report_xlsx"
+            model="budget.card.report"
+            name="bsp_claim_reports.budget_card_report_xlsx"
+            file="AR Claim Card Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+    <record id="action_aging_claim_report_html" model="ir.actions.client">
+        <field name="name">Aging Claim Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'aging.claim.report'}"
+        />
+    </record>
+
+    <report string="Aging Claim PDF"
+            id="action_aging_claim_report_pdf"
+            model="aging.claim.report"
+            name="bsp_claim_reports.aging_claim_report_pdf"
+            file="bsp_claim_reports.aging_claim_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'Aging Claim Report'"
+            paperformat="bsp_claim_reports.paperformat_budget_card"
+    />
+
+    <report string="Aging Claim XLSX"
+            id="action_aging_claim_report_xlsx"
+            model="aging.claim.report"
+            name="bsp_claim_reports.aging_claim_report_xlsx"
+            file="Aging Claim Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+
+
+    <record id="action_cl_recap_report_html" model="ir.actions.client">
+        <field name="name">CL Recapitulation Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'cl.recap.report'}"
+        />
+    </record>
+    <record id="action_claim_journal_report_html" model="ir.actions.client">
+        <field name="name">CLAIM Journal Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'claim.journal.report'}"
+        />
+    </record>
+    <record id="action_claim_monitoring_report_html" model="ir.actions.client">
+        <field name="name">Claim Monitoring Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'claim.monitoring.report'}"/>
+    </record>
+
+    <record id="action_claim_bm_report_html" model="ir.actions.client">
+        <field name="name">Claim BM Recapitulation Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'claim.bmbk.report'}"/>
+    </record>
+
+    <record id="action_claim_bk_report_html" model="ir.actions.client">
+        <field name="name">Claim BK Recapitulation Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'claim.bmbk.report'}"/>
+    </record>
+
+    <record id="action_bm_allocation_report_html" model="ir.actions.client">
+        <field name="name">Claim BM Recapitulation Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'bmbk.allocation.report'}"/>
+    </record>
+
+    <record id="action_bk_allocation_report_html" model="ir.actions.client">
+        <field name="name">Claim BK Recapitulation Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'bmbk.allocation.report'}"/>
+    </record>
+
+     <record id="action_claim_balance_report_html" model="ir.actions.client">
+        <field name="name">Claim Balance Report</field>
+        <field name="tag">finance_claim_report_backend</field>
+        <field name="context" eval="{'active_model': 'claim.balance.report'}"/>
+    </record>
+
+
+    <report string="CL Recap PDF"
+            id="action_cl_recap_report_pdf"
+            model="cl.recap.report"
+            name="bsp_claim_reports.cl_recap_report_pdf"
+            file="bsp_claim_reports.cl_recap_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'CL Recap Report'"
+            paperformat="bsp_claim_reports.paperformat_budget_card"
+    />
+    <report string="CLAIM Journal PDF"
+            id="action_claim_journal_report_pdf"
+            model="claim.journal.report"
+            name="bsp_claim_reports.claim_journal_report_pdf"
+            file="bsp_claim_reports.claim_journal_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'CLAIM Journal Report'"
+            paperformat="bsp_claim_reports.paperformat_budget_card"
+    />
+
+      <report string="Claim Monitoring Report PDF"
+            id="action_claim_monitoring_report_pdf"
+            model="claim.monitoring.report"
+            name="bsp_claim_reports.claim_monitoring_report_pdf"
+            file="bsp_claim_reports.claim_monitoring_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'Claim Monitoring Report'"
+            paperformat="bsp_claim_reports.paperformat_claim_monitoring"
+    />
+
+    <report string="Claim BM Recapitulation Report PDF"
+            id="action_claim_bm_report_pdf"
+            model="claim.bmbk.report"
+            name="bsp_claim_reports.claim_bm_report_pdf"
+            file="bsp_claim_reports.claim_bm_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'Claim BM Recapitulation Report'"
+            paperformat="bsp_claim_reports.paperformat_claim_monitoring"
+    />
+
+    <report string="Claim BK Recapitulation Report PDF"
+            id="action_claim_bk_report_pdf"
+            model="claim.bmbk.report"
+            name="bsp_claim_reports.claim_bk_report_pdf"
+            file="bsp_claim_reports.claim_bk_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'Claim BK Recapitulation Report'"
+            paperformat="bsp_claim_reports.paperformat_claim_monitoring"
+    />
+
+
+    <report string="BM Allocation Report PDF"
+            id="action_bm_alloc_allocation_report_pdf"
+            model="bmbk.allocation.report"
+            name="bsp_claim_reports.bm_allocation_report_pdf"
+            file="bsp_claim_reports.bm_allocation_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'BM Allocation Report'"
+            paperformat="bsp_claim_reports.paperformat_claim_monitoring"
+    />
+
+    <report string="BK Allocation Report PDF"
+            id="action_bk_alloc_allocation_report_pdf"
+            model="bmbk.allocation.report"
+            name="bsp_claim_reports.bk_allocation_report_pdf"
+            file="bsp_claim_reports.bk_allocation_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'BK Allocation Report'"
+            paperformat="bsp_claim_reports.paperformat_claim_monitoring"
+    />
+
+    <report string="Saldo Piutang Klaim Report PDF"
+            id="action_claim_balance_report_pdf"
+            model="claim.balance.report"
+            name="bsp_claim_reports.claim_balance_report_pdf"
+            file="bsp_claim_reports.claim_balance_report_pdf"
+            report_type="qweb-pdf"
+            print_report_name="'Claim Balance Report'"
+            paperformat="bsp_claim_reports.paperformat_claim_monitoring"
+    />
+
+    <report string="CL Recap XLSX"
+            id="action_cl_recap_report_xlsx"
+            model="cl.recap.report"
+            name="bsp_claim_reports.cl_recap_report_xlsx"
+            file="CL Recap Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+    <report string="CLAIM Journal XLSX"
+            id="action_claim_journal_report_xlsx"
+            model="claim.journal.report"
+            name="bsp_claim_reports.claim_journal_report_xlsx"
+            file="CLAIM Journal Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+    <report string="Claim Monitoring Report XLSX"
+            id="action_claim_monitoring_report_xlsx"
+            model="claim.monitoring.report"
+            name="bsp_claim_reports.claim_monitoring_report_xlsx"
+            file="CLAIM Monitoring Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+     <report string="Claim BM Recapitulation Report XLSX"
+            id="action_claim_bm_report_xlsx"
+            model="claim.bmbk.report"
+            name="bsp_claim_reports.claim_bmbk_report_xlsx"
+            file="BM Recapitulation Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+      <report string="Claim BK Recapitulation Report XLSX"
+            id="action_claim_bk_report_xlsx"
+            model="claim.bmbk.report"
+            name="bsp_claim_reports.claim_bmbk_report_xlsx"
+            file="BK Recapitulation Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+    <report string="BM Allocation Report XLSX"
+            id="action_bm_alloc_allocation_report_xlsx"
+            model="bmbk.allocation.report"
+            name="bsp_claim_reports.bmbk_allocation_report_xlsx"
+            file="BM Allocation Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+    <report string="BK Allocation Report XLSX"
+            id="action_bk_alloc_allocation_report_xlsx"
+            model="bmbk.allocation.report"
+            name="bsp_claim_reports.bmbk_allocation_report_xlsx"
+            file="BK Allocation Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+    <report string="Saldo Piutang Klaim Report XLSX"
+            id="action_claim_balance_report_xlsx"
+            model="claim.balance.report"
+            name="bsp_claim_reports.claim_balance_report_xlsx"
+            file="Claim Balance Report"
+            report_type="xlsx"
+            attachment_use="False"
+    />
+
+
+</odoo>

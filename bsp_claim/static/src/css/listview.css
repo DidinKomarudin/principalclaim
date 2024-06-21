@@ -1,0 +1,21 @@
+.o_data_cell{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space:nowrap;
+    max-width: 500px !important;
+}
+
+.o_column_sortable{
+    background-color: #00a09dba;
+    position: relative;
+    user-select: none;
+    white-space:nowrap;
+}
+
+
+.table-responsive .o_list_view tfoot tr:nth-child(1) td {
+    background-color:#875a7b6e;
+    color:white;
+    font-weight: bold;
+}
+

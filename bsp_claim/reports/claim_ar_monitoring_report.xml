@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="claim_ar_monitoring_report_search_view" model="ir.ui.view">
+        <field name="name">bsp.claim.ar.monitoring.report.search</field>
+        <field name="model">bsp.claim.cl</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <search string="Claim AR Balance Report">
+                <field name="name"/>
+                <field name="operating_unit_id" />
+                <field name="partner_id" />
+                <field name="send_date"/>
+                 <field name="state"/>
+            </search>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_claim_ar_monitoring_report_tree">
+        <field name="name">bsp.claim.ar.monitoring.report.tree</field>
+        <field name="model">bsp.claim.cl</field>
+        <field eval="10" name="priority"/>
+        <field name="arch" type="xml">
+            <tree string="Claim AR Balance Report" create="0" delete="0">
+                <field name="coa_acc"/>
+                <field name="coding"/>
+                <field name="operating_unit_id"/>
+                <field name="bmbk_ids" widget="many2many_tags"/>
+                <field name="partner_id"/>
+                <field name="ref"/>
+                <field name="name"/>
+                <field name="net_amount" sum="Total Claim Net"/>
+                <field name="realization_amount" sum="Total Realisasi"/>
+                <field name="balance_amount" sum="Total Balance"/>
+                <field name="send_date"/>
+                <field name="claim_age0"/>
+                <field name="claim_age"/>
+                <field name="day90" sum="Total &gt; 90 hari"/>
+                <field name="day61_90" sum="Total 61-90 hari"/>
+                <field name="day31_60" sum="Total 31-60 hari"/>
+                <field name="day0_30" sum="Total 0-30 hari"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+</odoo>

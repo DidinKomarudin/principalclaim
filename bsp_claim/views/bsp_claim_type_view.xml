@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="bsp_claim_type_search_form_view" model="ir.ui.view">
+        <field name="name">bsp.claim.type.search.form</field>
+        <field name="model">bsp.claim.type</field>
+        <field name="arch" type="xml">
+            <search string="Branch Correspondence">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="color"/>
+                <field name="coas"/>
+                <field name="sequence"/>
+                <field name="is_from_bis"/>
+                <field name="is_can_partial"/>
+                <field name="coding"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bsp_claim_type_form" model="ir.ui.view">
+        <field name="name">bsp.claim.type.form</field>
+        <field name="model">bsp.claim.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="color"/>
+                            <field name="coas"/>
+                            <field name="is_from_bis"/>
+                            <field name="is_display"/>
+                            <field name="is_can_partial"/>
+                            <field name="coding"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bsp_claim_type_tree" model="ir.ui.view">
+        <field name="name">bsp.claim.type.tree</field>
+        <field name="model">bsp.claim.type</field>
+        <field name="arch" type="xml">
+            <tree string="Claim Type List">
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="color"/>
+                <field name="coas"/>
+                <field name="is_from_bis"/>
+                <field name="is_display"/>
+                <field name="is_can_partial"/>
+                <field name="coding"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+    <record id="bsp_claim_type_action" model="ir.actions.act_window">
+            <field name="name">Claim Overview</field>
+            <field name="res_model">bsp.claim.type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="domain">[('is_display', '=',True )]</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new claim collection
+              </p><p>
+                The operation type system allows you to assign each claim
+                operation a specific type which will alter its views accordingly.
+                On the operation type you could e.g. specify if claim type is needed by default,
+                if it should show the principal.
+              </p>
+            </field>
+        </record>
+         <record id="bsp_claim_action_claim_type" model="ir.actions.act_window">
+            <field name="name">All Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+            }
+            </field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="bsp_claim_action_claim_type_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="bsp_claim_action_claim_type"/>
+        </record>
+
+        <record id="action_claim_tree_draft" model="ir.actions.act_window">
+            <field name="name">Draft Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+                    'search_default_draft': 1,
+            }
+            </field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="action_claim_tree_draft_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_claim_tree_draft"/>
+        </record>
+
+        <record id="action_claim_tree_pending" model="ir.actions.act_window">
+            <field name="name">Pending Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+                    'search_default_pending': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="action_claim_tree_pending_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_claim_tree_pending"/>
+        </record>
+
+        <record id="action_claim_tree_incomplete" model="ir.actions.act_window">
+            <field name="name">InComplete Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+                    'search_default_incomplete': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="action_claim_tree_incomplete_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_claim_tree_incomplete"/>
+        </record>
+
+        <record id="action_claim_tree_post" model="ir.actions.act_window">
+            <field name="name">Post Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+                    'search_default_post': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="action_claim_tree_post_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_claim_tree_post"/>
+        </record>
+
+
+        <record id="action_claim_tree_paid" model="ir.actions.act_window">
+            <field name="name">Paid Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+                    'search_default_paid': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="action_claim_tree_paid_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_claim_tree_paid"/>
+        </record>
+
+        <record id="action_claim_tree_done" model="ir.actions.act_window">
+            <field name="name">Done Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+                    'search_default_done': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="action_claim_tree_done_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_claim_tree_done"/>
+        </record>
+
+
+        <record id="action_claim_tree_cancel" model="ir.actions.act_window">
+            <field name="name">Done Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+                    'search_default_cancel': 1,
+            }
+            </field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="action_claim_tree_cancel_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_claim_tree_cancel"/>
+        </record>
+
+        <record id="action_claim_tree_reject" model="ir.actions.act_window">
+            <field name="name">Done Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+                    'search_default_reject': 1,
+            }
+            </field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new Claim
+              </p>
+            </field>
+        </record>
+        <record id="action_claim_tree_reject_tree" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bsp_claim_cl_tree"/>
+            <field name="act_window_id" ref="action_claim_tree_reject"/>
+        </record>
+
+        <record id="action_claim_form" model="ir.actions.act_window">
+            <field name="name">New Claim</field>
+            <field name="res_model">bsp.claim.cl</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,pivot,graph</field>
+            <field name="domain"></field>
+            <field name="context">{
+                    'search_default_claim_type_id': [active_id],
+                    'default_claim_type_id': active_id,
+                    'contact_display': 'remark',
+            }
+            </field>
+            <field name="search_view_id" ref="bsp_claim_cl_search_form_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Define a new transfer
+              </p>
+            </field>
+        </record>
+
+
+
+	    <record id="bsp_claim_type_kanban" model="ir.ui.view">
+            <field name="name">bsp.claim.type.kanban</field>
+            <field name="model">bsp.claim.type</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_background_grey o_kanban_dashboard o_emphasize_colors o_bsp_kanban" create="0">
+                    <field name="color"/>
+                    <field name="code" readonly="1"/>
+                    <field name="count_claim_draft"/>
+                    <field name="count_claim_pending"/>
+                    <field name="count_claim_incomplete"/>
+                    <field name="count_claim_post"/>
+                    <field name="count_claim_late"/>
+                    <field name="count_claim_paid"/>
+                    <field name="count_claim_done"/>
+                    <templates>
+                        <t t-name="kanban-box">
+<!--                            <div t-if="['cncl', 'discount', 'barang','salary'].indexOf(record.code.raw_value) > -1" t-attf-class="#{kanban_color(record.color.raw_value)}" name="bsp_claim">-->
+                             <div  t-attf-class="#{kanban_color(record.color.raw_value)}" name="bsp_claim">
+                                <div>
+                                    <div t-attf-class="o_kanban_card_header">
+                                        <div class="o_kanban_card_header_title">
+                                            <div class="o_primary">
+                                                <a type="object" name="get_bsp_claim_action_claim_type">
+                                                    <field name="name"/>
+                                                </a>
+                                            </div>
+                                            <div class="o_secondary"><field class="o_secondary"  name="code" readonly="1"/></div>
+                                        </div>
+                                        <div class="o_kanban_manage_button_section">
+                                            <a class="o_kanban_manage_toggle_button" href="#"><i class="fa fa-ellipsis-v" role="img" aria-label="Manage" title="Manage"/></a>
+                                        </div>
+                                    </div>
+                                    <div class="container o_kanban_card_content">
+                                        <div class="row">
+                                            <div class="col-6 o_kanban_primary_left">
+                                                <button class="btn btn-primary" name="get_action_claim_tree_draft" type="object">
+                                                    <span t-if="record.code.raw_value =='cncl'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='discount'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='barang'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='faktur'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='noncl'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='salary'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='cabang'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='manual'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='insentif'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='provisi'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='transfer'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='other'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='mix'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+                                                    <span t-if="record.code.raw_value =='mac'"><t t-esc="record.count_claim_draft.value"/> To Process</span>
+
+                                                </button>
+
+                                                <button class="btn btn-primary" name="%(action_claim_form)d"
+                                                        type="action"
+                                                        groups="bsp_claim.group_claim_branch_user">
+                                                    <span> NEW </span>
+                                                </button>
+
+
+
+                                            </div>
+                                            <div class="col-6 o_kanban_primary_right">
+                                                <div t-if="record.count_claim_draft.raw_value > 0" class="row">
+                                                </div>
+
+                                                <div t-if="record.count_claim_pending.raw_value > 0" class="row">
+                                                    <div class="col-9">
+                                                        <a name="get_action_claim_tree_pending" type="object">
+                                                            Pending
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <field name="count_claim_pending"/>
+                                                    </div>
+                                                </div>
+
+                                                <div t-if="record.count_claim_incomplete.raw_value > 0" class="row">
+                                                    <div class="col-9">
+                                                        <a name="get_action_claim_tree_incomplete" type="object">
+                                                            InComplete
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <field name="count_claim_incomplete"/>
+                                                    </div>
+                                                </div>
+
+                                                <div t-if="record.count_claim_post.raw_value > 0" class="row">
+                                                    <div class="col-9">
+                                                        <a class="oe_kanban_bsp_claim_type_list" name="get_action_claim_tree_post" type="object">
+                                                            Post
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <field name="count_claim_post"/>
+                                                    </div>
+                                                </div>
+
+                                                <div t-if="record.count_claim_paid.raw_value > 0" class="row">
+                                                    <div class="col-9">
+                                                        <a class="oe_kanban_bsp_claim_type_list" name="get_action_claim_tree_paid" type="object">
+                                                            Paid
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <field name="count_claim_paid"/>
+                                                    </div>
+                                                </div>
+                                                <div t-if="record.count_claim_done.raw_value > 0" class="row">
+                                                    <div class="col-9">
+                                                        <a class="oe_kanban_bsp_claim_type_list" name="get_action_claim_tree_done" type="object">
+                                                            Done
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <field name="count_claim_done"/>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div><div class="container o_kanban_card_manage_pane dropdown-menu" role="menu">
+                                        <div class="row">
+                                            <div class="col-6 o_kanban_card_manage_section o_kanban_manage_view">
+                                                <div role="menuitem" class="o_kanban_card_manage_title">
+                                                    <span>View</span>
+                                                </div>
+                                                <div role="menuitem">
+                                                    <a name="get_bsp_claim_action_claim_type" type="object">All</a>
+                                                </div>
+                                                <div role="menuitem">
+                                                    <a name="%(action_claim_tree_draft)d" type="action">Draft</a>
+                                                </div>
+                                                <div role="menuitem">
+                                                    <a name="get_action_claim_tree_pending" type="object">Pending</a>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 o_kanban_card_manage_section o_kanban_manage_new">
+                                                <div role="menuitem" class="o_kanban_card_manage_title">
+                                                    <span>New</span>
+                                                </div>
+                                                <div role="menuitem">
+                                                    <a name="%(action_claim_form)d" type="action" >Claim Collection</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div t-if="widget.editable" class="o_kanban_card_manage_settings row">
+                                            <div class="col-8" role="menuitem" aria-haspopup="true">
+                                                <ul class="oe_kanban_colorpicker" data-field="color" role="menu"/>
+                                            </div>
+                                            <div role="menuitem" class="col-4 text-center">
+                                                <a type="edit">Settings</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+    
+    
+
+
+
+    
+</odoo>
